@@ -13,6 +13,11 @@ import java.awt.event.ActionEvent;
 
 
 public class SignUpOne extends JFrame {
+    long random;
+    JTextField textFirstname , textLastname,textPincode;
+    JDateChooser date;
+    JRadioButton male;
+    
     JButton next;
     SignUpOne(){
         setLayout(null);
@@ -39,7 +44,7 @@ public class SignUpOne extends JFrame {
         Firstname.setBounds(100,150,100,50);
         add(Firstname);
         
-        JTextField textFirstname = new JTextField();
+        textFirstname = new JTextField();
         textFirstname.setFont(new Font("Arial" , Font.PLAIN , 16));
         textFirstname.setBounds(300,160,400,30);
         add(textFirstname);
@@ -50,7 +55,7 @@ public class SignUpOne extends JFrame {
         Lastname.setBounds(100,200,100,50);
         add(Lastname);
         
-        JTextField textLastname = new JTextField();
+        textLastname = new JTextField();
         textLastname.setFont(new Font("Arial" , Font.PLAIN , 16));
         textLastname.setBounds(300,210,400,30);
         add(textLastname);
@@ -131,7 +136,7 @@ public class SignUpOne extends JFrame {
         Pincode.setBounds(100,400,100,50);
         add(Pincode);
         
-        JTextField textPincode = new JTextField();
+        textPincode = new JTextField();
         textPincode.setFont(new Font("Arial" , Font.PLAIN , 16));
         textPincode.setBounds(300,410,400,30);
         add(textPincode);
