@@ -101,7 +101,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
     
     public void actionPerformed(ActionEvent ae){
         if(ae.getSource() == submit){
-            String accountType = null;
+            String accountType = "";
             if(r1.isSelected()){
                 accountType = "Saving Account";
             } else if(r2.isSelected()){
@@ -115,10 +115,11 @@ public class SignUpTwo extends JFrame implements ActionListener {
             //System.out.println(pinnumber);
        
             try{
-                if(accountType.equals("")){
+                if(accountType.equals("")){  //false && false , false || false
                    JOptionPane.showMessageDialog(null, "Details are missing");
                 }
                 else{
+                    if(c1.isSelected()){
                     Conn conn = new Conn();
                     String query1 = "insert into signuptwo values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"')";
                     String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"')";
@@ -126,6 +127,11 @@ public class SignUpTwo extends JFrame implements ActionListener {
                     conn.s.executeUpdate(query2);
                     
                     JOptionPane.showMessageDialog(null,"Card Number: " + cardnumber + "\n Pin: " + pinnumber);
+                        
+                    }else {
+                        JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
+                    }
+                    
                 }
                         
             } catch (Exception e){
