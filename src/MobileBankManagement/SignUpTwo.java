@@ -15,6 +15,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
         JCheckBox c1;
         JButton submit , cancel;
         String formno;
+        int balance = 0;
     
     SignUpTwo(String formno){
         this.formno = formno;
@@ -122,7 +123,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
                 else{
                     if(c1.isSelected()){
                     Conn conn = new Conn();
-                    String query1 = "insert into signuptwo values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"')";
+                    String query1 = "insert into balance values ('"+balance+"', '"+cardnumber+"', '"+pinnumber+"')";
                     String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"')";
                     conn.s.executeUpdate(query1);
                     conn.s.executeUpdate(query2);
