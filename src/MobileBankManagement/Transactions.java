@@ -103,6 +103,7 @@ public class Transactions extends JFrame implements ActionListener{
         
         setLocation(200, 200);
         setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     
             
         }
@@ -110,6 +111,10 @@ public class Transactions extends JFrame implements ActionListener{
         public void actionPerformed(ActionEvent ae){
             if(ae.getSource() == exit){
                 System.exit(0);
+            } else if (ae.getSource() == deposit){
+                setVisible(false);
+                new Deposit(cardnumber,pinnumber).setVisible(true);
+                
             }
         }
 
