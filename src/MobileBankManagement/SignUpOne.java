@@ -156,6 +156,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         setSize(1080 , 780);
         setVisible(true);
         setLocation(200, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
         
     public void actionPerformed(ActionEvent e){

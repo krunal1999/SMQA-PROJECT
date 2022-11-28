@@ -96,6 +96,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
         setSize(1080 , 780);
         setVisible(true);
         setLocation(200, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         
     }
     
@@ -130,8 +131,9 @@ public class SignUpTwo extends JFrame implements ActionListener {
                         
                     }else {
                         JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
-                    }
-                    
+                    } 
+                    setVisible(false);
+                    new Deposit(cardnumber, pinnumber).setVisible(true);
                 }
                         
             } catch (Exception e){
@@ -139,6 +141,8 @@ public class SignUpTwo extends JFrame implements ActionListener {
             }
             
         } else if (ae.getSource() == cancel){
+            setVisible(false);
+            new Login().setVisible(true);
             
         }
         

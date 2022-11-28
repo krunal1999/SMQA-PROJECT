@@ -4,6 +4,7 @@ package MobileBankManagement;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;
 
 /**
  *
@@ -11,8 +12,9 @@ import java.awt.event.*;
  */
 public class Login extends JFrame implements ActionListener{
     JButton signin , signup , admin;
-    JTextField UserNameText ;
+    JTextField accnumtext ;
     JPasswordField PasswordText;
+    
     
     Login(){
         setTitle("Money Bank");
@@ -34,15 +36,15 @@ public class Login extends JFrame implements ActionListener{
         text.setBounds(250, 40, 800, 140);
         add(text);
         
-        JLabel UserName = new JLabel("Username");
-        UserName.setFont(new Font("Arial" , Font.BOLD , 32));
-        UserName.setBounds(200, 240, 400, 30);
-        add(UserName);
+        JLabel accnum = new JLabel("Account No");
+        accnum.setFont(new Font("Arial" , Font.BOLD , 32));
+        accnum.setBounds(200, 240, 400, 30);
+        add(accnum);
         
-        UserNameText = new JTextField();
-        UserNameText.setFont(new Font("Arial" , Font.PLAIN , 20));
-        UserNameText.setBounds(400, 240, 270, 30);
-        add(UserNameText);
+        accnumtext = new JTextField();
+        accnumtext.setFont(new Font("Arial" , Font.PLAIN , 20));
+        accnumtext.setBounds(400, 240, 270, 30);
+        add(accnumtext);
         
         JLabel Password = new JLabel("Password");
         Password.setFont(new Font("Arial" , Font.BOLD , 32));
@@ -82,12 +84,31 @@ public class Login extends JFrame implements ActionListener{
         setSize(1080 , 780);
         setVisible(true);
         setLocation(200, 200);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         
     }
     
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == signin){
+            Conn conn = new Conn();
+            String cardnumber = accnumtext.getText();
+            String pinnumber = PasswordText.getText();
+            
+            String query = "select * from login where cardnumber = '"+cardnumber+"' and pinnumber = '" +pinnumber+ "'";
+            
+            try{
+                ResultSet rs = conn.s.executeQuery(query);
+                if(rs.next()){
+                    setVisible(false);
+                    new Transactions(cardnumber , pinnumber).setVisible(true);
+                }else {
+                    JOptionPane.showMessageDialog(null, "Incorrect Card Number or Pin");
+                }
+                
+            }catch (Exception er){
+                System.out.println(er);
+            }
             
         } else if(e.getSource() == signup){
             setVisible(false);
