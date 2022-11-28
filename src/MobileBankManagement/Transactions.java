@@ -110,6 +110,10 @@ public class Transactions extends JFrame implements ActionListener{
                 setVisible(false);
                 new Withdraw(cardnumber,pinnumber).setVisible(true);
                 
+            }else if (ae.getSource() == pinch){
+                setVisible(false);
+                new PinChange(cardnumber,pinnumber).setVisible(true);
+                
             }
         }
 

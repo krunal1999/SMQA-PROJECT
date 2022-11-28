@@ -4,7 +4,6 @@ package MobileBankManagement;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.*;
 import java.sql.*;
 import java.util.Date;
 /**
@@ -89,7 +88,7 @@ public class Withdraw extends JFrame implements ActionListener{
                         }
                         
                         String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"')";
-                        String query2= "update balance set balance = '"+balance+"' where pin = '"+pinnumber+"'";
+                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
                         

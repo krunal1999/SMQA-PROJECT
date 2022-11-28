@@ -81,7 +81,7 @@ public class Deposit extends JFrame implements ActionListener{
                         }
 
                         String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+ "')";
-                        String query2= "update balance set balance = '"+balance+"' where pin = '"+pinnumber+"'";
+                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
                         
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
