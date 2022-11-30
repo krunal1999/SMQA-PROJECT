@@ -118,6 +118,11 @@ public class Transactions extends JFrame implements ActionListener{
                 new PinChange(username,cardnumber,pinnumber).setVisible(true);
                 
             }
+            else if (ae.getSource() == accdet){
+                setVisible(false);
+                new AccDetails(username,cardnumber,pinnumber).setVisible(true);
+                
+            }
         }
 
         
