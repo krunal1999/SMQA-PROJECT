@@ -11,15 +11,17 @@ import java.sql.*;
  * @author krunal
  */
 public class PinChange extends JFrame implements ActionListener{
-    String pinnumber , cardnumber;
+    String pinnumber , username, cardnumber;
     JTextField currpintext, newpintext , repintext;
     JButton update , back;
     
-    PinChange(String cardnumber , String pinnumber){
+    PinChange(String username,String cardnumber , String pinnumber){
        setLayout(null); 
        
        this.pinnumber = pinnumber;
+       this.username = username;
        this.cardnumber = cardnumber;
+       
         JLabel text = new JLabel("Change Pin");
         text.setFont(new Font("Arial" , Font.CENTER_BASELINE , 44));
         text.setForeground(Color.green);
@@ -103,7 +105,7 @@ public class PinChange extends JFrame implements ActionListener{
                     //to do
                     try{
                         Conn conn = new Conn();
-                        String query1= "update login set pinnumber = '"+nextpin+"' where pinnumber = '"+checkpin+"'";
+                        String query1= "update login set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
                         String query2= "update bank set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
                         String query3= "update balance set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
                         conn.s.executeUpdate(query1);
@@ -111,7 +113,7 @@ public class PinChange extends JFrame implements ActionListener{
                         conn.s.executeUpdate(query3);
                         JOptionPane.showMessageDialog(null, "Pin changed successfully");
                         setVisible(false);
-                        new Transactions(cardnumber, nextpin).setVisible(true);
+                        new Transactions(username,cardnumber, nextpin).setVisible(true);
 
                     } catch (Exception er){
                         System.out.println(er);
@@ -126,14 +128,14 @@ public class PinChange extends JFrame implements ActionListener{
             
         } else{
             setVisible(false);
-            new Transactions(cardnumber,pinnumber).setVisible(true);
+            new Transactions(username,cardnumber,pinnumber).setVisible(true);
         }
         
     }
     
     
     public static void main(String args[]){
-        new PinChange("","");
+        new PinChange("","","");
     }
     
     

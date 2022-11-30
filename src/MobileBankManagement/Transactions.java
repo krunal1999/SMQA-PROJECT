@@ -10,12 +10,13 @@ import java.awt.event.*;
 public class Transactions extends JFrame implements ActionListener{
          //global declaration
          JButton deposit, withdraw,Balance , accdet,pinch,ministatement,exit;
-         String cardnumber , pinnumber;
+         String username , pinnumber, cardnumber;
     
     
-        Transactions(String cardnumber , String pinnumber){
-        this.cardnumber = cardnumber;
+        Transactions(String username , String cardnumber, String pinnumber){
+        this.username = username;
         this.pinnumber = pinnumber;
+        this.cardnumber = cardnumber;
         
         setLayout(null);
         setTitle("Transactions Menu");
@@ -101,18 +102,25 @@ public class Transactions extends JFrame implements ActionListener{
         
         public void actionPerformed(ActionEvent ae){
             if(ae.getSource() == exit){
-                System.exit(0);
+                setVisible(false);
+                new Login().setVisible(true);
+                
             } else if (ae.getSource() == deposit){
                 setVisible(false);
-                new Deposit(cardnumber,pinnumber).setVisible(true);
+                new Deposit(username,cardnumber, pinnumber).setVisible(true);
                 
             }else if (ae.getSource() == withdraw){
                 setVisible(false);
-                new Withdraw(cardnumber,pinnumber).setVisible(true);
+                new Withdraw(username, cardnumber, pinnumber).setVisible(true);
                 
             }else if (ae.getSource() == pinch){
                 setVisible(false);
-                new PinChange(cardnumber,pinnumber).setVisible(true);
+                new PinChange(username,cardnumber,pinnumber).setVisible(true);
+                
+            }
+            else if (ae.getSource() == accdet){
+                setVisible(false);
+                new AccDetails(username,cardnumber,pinnumber).setVisible(true);
                 
             }
         }
@@ -121,7 +129,7 @@ public class Transactions extends JFrame implements ActionListener{
     
     
     public static void main(String args[]){
-        new Transactions("" , "");
+        new Transactions("" , "","");
         
     }
     
