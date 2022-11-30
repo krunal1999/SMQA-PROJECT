@@ -36,7 +36,7 @@ public class Login extends JFrame implements ActionListener{
         text.setBounds(250, 40, 800, 140);
         add(text);
         
-        JLabel accnum = new JLabel("Account No");
+        JLabel accnum = new JLabel("Username");
         accnum.setFont(new Font("Arial" , Font.BOLD , 32));
         accnum.setBounds(200, 240, 400, 30);
         add(accnum);
@@ -92,18 +92,23 @@ public class Login extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == signin){
             Conn conn = new Conn();
-            String cardnumber = accnumtext.getText();
+            String username = accnumtext.getText();
             String pinnumber = PasswordText.getText();
+            String cardnumber;
             
-            String query = "select * from login where cardnumber = '"+cardnumber+"' and pinnumber = '" +pinnumber+ "'";
+            String query = "select * from login where username = '"+username+"' and pin = '" +pinnumber+ "'";
             
             try{
                 ResultSet rs = conn.s.executeQuery(query);
+                
+                 
+                
                 if(rs.next()){
+                    cardnumber = rs.getString("cardnumber");
                     setVisible(false);
-                    new Transactions(cardnumber , pinnumber).setVisible(true);
+                    new Transactions(username ,cardnumber ,pinnumber).setVisible(true);
                 }else {
-                    JOptionPane.showMessageDialog(null, "Incorrect Card Number or Pin");
+                    JOptionPane.showMessageDialog(null, "Incorrect Username or Pin");
                 }
                 
             }catch (Exception er){
