@@ -111,7 +111,7 @@ public class PinChange extends JFrame implements ActionListener{
                         conn.s.executeUpdate(query3);
                         JOptionPane.showMessageDialog(null, "Pin changed successfully");
                         setVisible(false);
-                        new Login().setVisible(true);
+                        new Transactions(cardnumber, nextpin).setVisible(true);
 
                     } catch (Exception er){
                         System.out.println(er);
