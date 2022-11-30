@@ -4,24 +4,23 @@ package MobileBankManagement;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.ResultSet;
-import java.util.*;
+import java.sql.*;
+import java.util.Date;
 /**
  *
  * @author krunal
  */
-public class Deposit extends JFrame implements ActionListener{ 
+public class Withdraw extends JFrame implements ActionListener{ 
     JTextField amountText;
-    JButton deposit, back;
+    JButton withdraw, back;
     String pinnumber , cardnumber;
     int balance=0;
-    
-    Deposit(String cardnumber,String pinnumber){
+    Withdraw(String cardnumber,String pinnumber){
         this.pinnumber = pinnumber;
         this.cardnumber = cardnumber;
         setLayout(null);
         
-        JLabel text = new JLabel("Enter the amount to deposit");
+        JLabel text = new JLabel("Enter the amount to withdraw");
         text.setFont(new Font("Arial" , Font.CENTER_BASELINE , 44));
         text.setForeground(Color.green);
         text.setBounds(300,60,900,50);
@@ -32,20 +31,20 @@ public class Deposit extends JFrame implements ActionListener{
         amountText.setBounds(400,210,400,50);
         add(amountText);
         
-        deposit = new JButton("Deposit");
-        deposit.setFont(new Font("Arial" , Font.BOLD , 22));
-        deposit.setBounds(400, 280, 400, 50);
-        deposit.setBackground(Color.green);
-        deposit.setForeground(Color.white);
-        deposit.setFocusPainted(false);
-        deposit.addActionListener(this);
-        add(deposit);
+        withdraw = new JButton("Withdraw");
+        withdraw.setFont(new Font("Arial" , Font.BOLD , 22));
+        withdraw.setBounds(400, 280, 400, 50);
+        withdraw.setBackground(Color.red);
+        withdraw.setForeground(Color.white);
+        withdraw.setFocusPainted(false);
+        withdraw.addActionListener(this);
+        add(withdraw);
         
         back = new JButton("Back");
         back.setFont(new Font("Arial" , Font.BOLD , 22));
         back.setBounds(400, 350, 400, 50);
-        back.setBackground(Color.red);
-        back.setForeground(Color.white);
+        back.setBackground(Color.white);
+        back.setForeground(Color.black);
         back.setFocusPainted(false);
         back.addActionListener(this);
         add(back);
@@ -64,32 +63,38 @@ public class Deposit extends JFrame implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent ae){
-            if(ae.getSource() == deposit){
-                String depositamount = amountText.getText();
+            if(ae.getSource() == withdraw){
+                String withdrawamount = amountText.getText();
                 Date date = new Date();
-                if(depositamount.equals("")){
-                    JOptionPane.showMessageDialog(null, "Enter the amount to deposit");
+                if(withdrawamount.equals("")){
+                    JOptionPane.showMessageDialog(null, "Enter the amount to withdraw");
                 } else {
                     try{
                         Conn conn = new Conn();
+                        
                         ResultSet rs = conn.s.executeQuery("select * from balance where pin = '" +pinnumber+ "'");
                         if(rs.next()){
                             if(rs.getString("pin").equals(pinnumber)){
                                 balance = Integer.parseInt(rs.getString("balance"));
-                                balance += Integer.parseInt(depositamount);
+                                
                             }
                         }
-
-                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+ "')";
-                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
+                        if(ae.getSource() != back &&  balance < Integer.parseInt(withdrawamount) ){
+                            JOptionPane.showMessageDialog(null, "Insufficient Balance");
+                            return;
+                            
+                        }else{
+                            balance -= Integer.parseInt(withdrawamount);
+                        }
                         
+                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"')";
+                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
                         
-                        JOptionPane.showMessageDialog(null, ""+depositamount+ " Cash deposited successfully to account " +cardnumber);
+                        JOptionPane.showMessageDialog(null, ""+withdrawamount+ " Cash withdraw successfully to account " +cardnumber);
                         setVisible(false);
                         new Transactions(cardnumber, pinnumber).setVisible(true);  
-                        
                     } catch (Exception er){
                         System.out.println(er);
                     }
@@ -107,7 +112,7 @@ public class Deposit extends JFrame implements ActionListener{
     
     
     public static void main(String args[]){
-        new Deposit("","");
+        new Withdraw("","");
         
     }
     
