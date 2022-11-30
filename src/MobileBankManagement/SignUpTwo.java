@@ -14,11 +14,12 @@ public class SignUpTwo extends JFrame implements ActionListener {
         JRadioButton r1,r2;
         JCheckBox c1;
         JButton submit , cancel;
-        String formno;
+        String formno ,username;
         int balance = 0;
     
-    SignUpTwo(String formno){
+    SignUpTwo(String formno , String username){
         this.formno = formno;
+        this.username=username;
         setTitle("Money Bank");
         setLayout(null);
         
@@ -30,21 +31,32 @@ public class SignUpTwo extends JFrame implements ActionListener {
         Page2.setBounds(350,90,500,50);
         add(Page2);
         
+        JLabel type1 = new JLabel("username");
+        type1.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
+        type1.setBounds(100,200,200,30);
+        add(type1);
+        
+        JLabel type2 = new JLabel("XXXXXXX");
+        type2.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
+        type2.setBounds(100,200,200,30);
+        add(type2);
+        
+        
         JLabel type = new JLabel("Account Type");
         type.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        type.setBounds(100,150,200,30);
+        type.setBounds(100,250,200,30);
         add(type);
         
         r1 = new JRadioButton("Saving Account");
         r1.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
         r1.setBackground(Color.white);
-        r1.setBounds(300,150,150,30);
+        r1.setBounds(300,250,150,30);
         add(r1);
         
         r2 = new JRadioButton("Current Account");
         r2.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
         r2.setBackground(Color.white);
-        r2.setBounds(550,150,200,30);
+        r2.setBounds(550,250,200,30);
         add(r2);
         
         ButtonGroup accountGroup = new ButtonGroup();
@@ -53,22 +65,22 @@ public class SignUpTwo extends JFrame implements ActionListener {
         
         JLabel card = new JLabel("Card Number");
         card.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        card.setBounds(100,200,200,30);
+        card.setBounds(100,300,200,30);
         add(card);
         
         JLabel cardnumber = new JLabel("XXXX-XXXX");
         cardnumber.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        cardnumber.setBounds(300,200,500,30);
+        cardnumber.setBounds(300,300,500,30);
         add(cardnumber);
         
         JLabel pin = new JLabel("Pin Number");
         pin.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        pin.setBounds(100,250,200,30);
+        pin.setBounds(100,350,200,30);
         add(pin);
         
-        JLabel pinnumber = new JLabel("XXXX");
+        JLabel pinnumber = new JLabel("X-X-X-X");
         pinnumber.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        pinnumber.setBounds(300,250,500,30);
+        pinnumber.setBounds(300,350,500,30);
         add(pinnumber);
         
         c1 = new JCheckBox("Agree terms and condition");
@@ -111,7 +123,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
             }
         
             Random random = new Random();
-            String cardnumber = "" + Math.abs((random.nextInt() % 9000L)+ 11111000L);
+            String cardnumber = "" + Math.abs((random.nextInt() % 90000000L)+ 111110000000000L);
             String pinnumber = "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
             //System.out.println(cardnumber);
             //System.out.println(pinnumber);
@@ -123,18 +135,18 @@ public class SignUpTwo extends JFrame implements ActionListener {
                 else{
                     if(c1.isSelected()){
                     Conn conn = new Conn();
-                    String query1 = "insert into balance values ('"+balance+"', '"+cardnumber+"', '"+pinnumber+"')";
-                    String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"')";
+                    String query1 = "insert into balance values ('"+balance+"', '"+cardnumber+"', '"+pinnumber+"','"+username+"')";
+                    String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"', '"+username+"')";
                     conn.s.executeUpdate(query1);
                     conn.s.executeUpdate(query2);
                     
-                    JOptionPane.showMessageDialog(null,"Card Number: " + cardnumber + "\n Pin: " + pinnumber);
+                    JOptionPane.showMessageDialog(null,"User name " + username + "\n Pin: " + pinnumber);
                         
                     }else {
                         JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
                     } 
                     setVisible(false);
-                    new Deposit(cardnumber, pinnumber).setVisible(true);
+                    new Deposit(username,cardnumber, pinnumber).setVisible(true);
                 }
                         
             } catch (Exception e){
@@ -150,7 +162,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
     }
     
     public static void main(String args[]){
-     new SignUpTwo("");   
+     new SignUpTwo("","");   
     }
     
 }
