@@ -9,7 +9,7 @@ import java.awt.event.*;
  */
 public class Transactions extends JFrame implements ActionListener{
          //global declaration
-         JButton deposit, withdraw,FastCash,Balance , accdet,pinch,ministatement,exit;
+         JButton deposit, withdraw,Balance , accdet,pinch,ministatement,exit;
          String cardnumber , pinnumber;
     
     
@@ -44,18 +44,9 @@ public class Transactions extends JFrame implements ActionListener{
         withdraw.addActionListener(this);
         add(withdraw);
         
-        FastCash = new JButton("Fast Cash");
-        FastCash.setFont(new Font("Arial" , Font.BOLD , 28));
-        FastCash.setBounds(60, 400, 290, 60);
-        FastCash.setBackground(Color.white);
-        FastCash.setForeground(Color.green);
-        FastCash.setFocusPainted(false);
-        FastCash.addActionListener(this);
-        add(FastCash);
-        
         Balance = new JButton("Balance Enquiry");
         Balance.setFont(new Font("Arial" , Font.BOLD , 28));
-        Balance.setBounds(60, 500, 290, 60);
+        Balance.setBounds(60, 400, 290, 60);
         Balance.setBackground(Color.white);
         Balance.setForeground(Color.green);
         Balance.setFocusPainted(false);
@@ -92,8 +83,8 @@ public class Transactions extends JFrame implements ActionListener{
         exit = new JButton("Exit");
         exit.setFont(new Font("Arial" , Font.BOLD , 28));
         exit.setBounds(900, 500, 290, 60);
-        exit.setBackground(Color.white);
-        exit.setForeground(Color.green);
+        exit.setBackground(Color.red);
+        exit.setForeground(Color.white);
         exit.setFocusPainted(false);
         exit.addActionListener(this);
         add(exit);
@@ -114,6 +105,14 @@ public class Transactions extends JFrame implements ActionListener{
             } else if (ae.getSource() == deposit){
                 setVisible(false);
                 new Deposit(cardnumber,pinnumber).setVisible(true);
+                
+            }else if (ae.getSource() == withdraw){
+                setVisible(false);
+                new Withdraw(cardnumber,pinnumber).setVisible(true);
+                
+            }else if (ae.getSource() == pinch){
+                setVisible(false);
+                new PinChange(cardnumber,pinnumber).setVisible(true);
                 
             }
         }
