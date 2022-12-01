@@ -89,7 +89,7 @@ public class Withdraw extends JFrame implements ActionListener{
                             balance -= Integer.parseInt(withdrawamount);
                         }
                         
-                        String query = "insert into bank values('"+username+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"','"+username+"')";
+                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"','"+username+"')";
                         String query2= "update balance set balance = '"+balance+"' where username = '"+username+"'";
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);

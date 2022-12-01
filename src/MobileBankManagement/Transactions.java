@@ -122,7 +122,16 @@ public class Transactions extends JFrame implements ActionListener{
                 setVisible(false);
                 new AccDetails(username,cardnumber,pinnumber).setVisible(true);
                 
+            }else if (ae.getSource() == ministatement){
+                setVisible(false);
+                new MiniStatement(username,cardnumber,pinnumber).setVisible(true);
+                
+            }else if (ae.getSource() == Balance){
+                setVisible(false);
+                new BalanceEnquiry(username,cardnumber,pinnumber).setVisible(true);
+                
             }
+            
         }
 
         
