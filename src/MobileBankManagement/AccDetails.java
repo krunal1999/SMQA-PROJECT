@@ -49,14 +49,15 @@ public class AccDetails extends JFrame implements ActionListener {
         try{
             Conn conn = new Conn();
             ResultSet rs = conn.s.executeQuery("select * from signup where username='"+username+"'");
+            
             if(rs.next()){
                 card.setText(card.getText()+ "<html> <span> Firstname:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" +rs.getString("firstname")+"<br> <span> Lastname:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
                         +rs.getString("lastname")+"<br> <span> Date of birth:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+rs.getString("dob") +"<br> <span> Gender:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
                         + rs.getString("gender")+"<br> <span> Marital:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+rs.getString("marital") +"<br> <span> Occupation:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"
-                        + rs.getString("occupation")+"<br> <span> Pincode:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+rs.getString("pincode"));
-                
-                
+                        + rs.getString("occupation")+"<br> <span> Pincode:- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>"+ rs.getString("pincode")+"</html"
+                        ); 
             }
+           
             
         } catch (Exception e){
             System.out.println(e);
