@@ -88,7 +88,6 @@ public class Login extends JFrame implements ActionListener{
         
     }
     
-    @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == signin){
             Conn conn = new Conn();
@@ -100,9 +99,6 @@ public class Login extends JFrame implements ActionListener{
             
             try{
                 ResultSet rs = conn.s.executeQuery(query);
-                
-                 
-                
                 if(rs.next()){
                     cardnumber = rs.getString("cardnumber");
                     setVisible(false);
