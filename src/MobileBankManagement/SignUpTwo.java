@@ -116,13 +116,22 @@ public class SignUpTwo extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae){
         if(ae.getSource() == submit){
             String accountType = "";
+            boolean checkbox=false;
             if(r1.isSelected()){
                 accountType = "Saving Account";
             } else if(r2.isSelected()){
                 accountType = "Current Account";
             }
-        
-            Random random = new Random();
+            if(c1.isSelected()){
+                checkbox = true;
+            }
+            
+            if(accountType.equals("")){
+                JOptionPane.showMessageDialog(null, "Please select type of account");
+            }else if(!checkbox){
+                JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
+            }else{
+              Random random = new Random();
             String cardnumber = "" + Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
             String pinnumber = "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
             //System.out.println(cardnumber);
@@ -152,6 +161,10 @@ public class SignUpTwo extends JFrame implements ActionListener {
             } catch (Exception e){
                 System.out.println(e);
             }
+              
+            }
+            
+        
             
         } else if (ae.getSource() == cancel){
             setVisible(false);

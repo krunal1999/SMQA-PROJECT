@@ -133,12 +133,16 @@ public class Login extends JFrame implements ActionListener{
             }
             }
             
-        } else if(e.getSource() == signup){
+        } 
+        //if user click on signup
+        else if(e.getSource() == signup){
             
             setVisible(false);
             new SignUpOne().setVisible(true);
             
-        } else if(e.getSource() == admin){
+        } 
+        //if user click on admin
+        else if(e.getSource() == admin){
             
             String username = accnumtext.getText();
             String pinnumber = PasswordText.getText(); //this method is deprecated 

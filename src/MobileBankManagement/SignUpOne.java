@@ -4,10 +4,7 @@ package MobileBankManagement;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
-import com.toedter.calendar.JDateChooser;
-import com.toedter.calendar.demo.DateChooserPanel;
 import java.awt.event.*;
-import java.time.*;
 /**
  *
  * @author krunal
@@ -15,11 +12,13 @@ import java.time.*;
 
 
 public class SignUpOne extends JFrame implements ActionListener{
+    //declaring global variable
     long random ,randomforuserid;
-    JTextField textFirstname , textLastname,textPincode;
-    JDateChooser date;
+    JTextField textFirstname , textLastname,textPincode , agetext;
     JRadioButton male , female , othergender , single, married ,otherstatus , student , employee, business, otheroccupation;
-    JButton next;
+    JButton next , back;
+    
+    //default constructor
     SignUpOne(){
         setLayout(null);
         
@@ -62,16 +61,17 @@ public class SignUpOne extends JFrame implements ActionListener{
         textLastname.setBounds(300,210,200,30);
         add(textLastname);
         
-        // creating label and textfield for dob
-        JLabel dob = new JLabel("Date of Birth");
+        // creating label and textfield for date of birth
+        JLabel dob = new JLabel("Age");
         dob.setFont(new Font("Arial" , Font.PLAIN , 20));
         dob.setBounds(100,250,300,50);
         add(dob);
         
-        date  = new JDateChooser();
-        date.setFont(new Font("Arial" , Font.PLAIN , 18));
-        date.setBounds(300,260,200,30);
-        add(date);
+        agetext = new JTextField();
+        agetext.setFont(new Font("Arial" , Font.PLAIN , 16));
+        agetext.setBounds(300,250,200,30);
+        add(agetext);
+        
         
         // creating label and textfield for gender
         JLabel gender  = new JLabel("Gender");
@@ -178,7 +178,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         textPincode.setBounds(300,460,200,30);
         add(textPincode);
         
-        
+        //creating button
         next = new JButton("Next");
         next.setFont(new Font("Arial" , Font.BOLD , 20));
         next.setBounds(600, 580, 120, 40);
@@ -186,6 +186,14 @@ public class SignUpOne extends JFrame implements ActionListener{
         next.setForeground(Color.white);
         next.addActionListener(this);
         add(next);
+        
+        back = new JButton("Back");
+        back.setFont(new Font("Arial" , Font.BOLD , 20));
+        back.setBounds(460, 580, 120, 40);
+        back.setBackground(Color.red);
+        back.setForeground(Color.white);
+        back.addActionListener(this);
+        add(back);
        
         
         getContentPane().setBackground(Color.white);
@@ -195,12 +203,17 @@ public class SignUpOne extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
         
-    public void actionPerformed(ActionEvent e){
+    public void actionPerformed(ActionEvent ae){
+        //if user click on next
+        if(ae.getSource() == next){
+        
         String formno = random+"";  // long vlaue
         String userid = randomforuserid+"";
         String firstname = textFirstname.getText();
         String lastname = textLastname.getText();
-        String dob =((JTextField) date.getDateEditor().getUiComponent()).getText();
+        String age = agetext.getText();
+       
+        
         String gender = null;
         if(male.isSelected()){
             gender = "Male";
@@ -231,33 +244,89 @@ public class SignUpOne extends JFrame implements ActionListener{
         }
         
         String pincode = textPincode.getText();
-        //System.out.println(formno);
         
-        String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
+        boolean firstnamecheck= inputCheck(firstname , firstname.length());
+        boolean lastnamecheck = inputCheck(lastname ,firstname.length());
+        boolean gendercheck = inputCheck(gender , 5);
+        boolean agecheck = inputCheck(age,5);
+        boolean maritalcheck = inputCheck(marital , 5);
+        boolean occupationcheck = inputCheck(occupation,5);
+        boolean pincodecheck = inputCheck(pincode, pincode.length());
+        System.out.println(firstnamecheck);
                 
+        if(!firstnamecheck){  
+            JOptionPane.showMessageDialog(null, "firstname cant be empty and minimum length should be greater than 3");
+        }else if(!lastnamecheck){
+            JOptionPane.showMessageDialog(null, "Lastname cant be empty and minimum length should be greater than 3");
+        }else if(!gendercheck){
+            JOptionPane.showMessageDialog(null, "Please Select gender");
+        }else if(!agecheck){
+            JOptionPane.showMessageDialog(null, "age cant be empty");
+        }else if(!maritalcheck){
+            JOptionPane.showMessageDialog(null, "Please Select marital");
+        }else if(!occupationcheck){
+            JOptionPane.showMessageDialog(null, "occupation cant be empty");
+        }else if(!pincodecheck){
+            JOptionPane.showMessageDialog(null, "pincode number cant be empty");
+        }
+        else{
+         if(agecheck){
+             int intAge = Integer.parseInt(age);
+             boolean agecheck1 = ageCheck1(age,intAge);
+             if(!agecheck1){
+                 JOptionPane.showMessageDialog(null, "age should be above 18");
+             }
+         else{
+            String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
+            Conn c = new Conn();
+            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+age+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";
+             
         //validating inserted data
         try{
-            if(firstname.equals("") || lastname.equals("") || dob.equals("") || gender.equals("") || marital.equals("") || occupation.equals("") || pincode.equals("") ){
-            JOptionPane.showMessageDialog(null, "Please fill all details");
-        } else{
-            Conn c = new Conn();
-            
-            
-            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+dob+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";
             c.s.executeUpdate(query);
             
             //signuptwo object
             setVisible(false);
             new SignUpTwo(formno,username).setVisible(true);
             
-            
-            }  
-        } catch (Exception ae){
-            System.out.println(ae);
+        } catch (Exception e){
+            System.out.println(e);
+        }
+             }        
+         }
         }
         
+        } else if(ae.getSource() == back){
+            setVisible(false);
+            new Login();
+        }
     }
-
+    
+    public static boolean inputCheck(String text , int length) {
+             if (text == null || text.equals("") || length<3) {
+                return false;
+            }else{
+                return true; 
+             }
+         }
+    public static boolean ageCheck1(String text, int currAge) {
+             int length =text.length();
+             
+             if (text == null || text.equals("") || length>3 || currAge<18 || currAge>100) {
+                return false;
+            }else{
+                try {
+                     int i = Integer.parseInt(text);
+                }catch (NumberFormatException nf) {
+                    return false;
+                } 
+                if(length <= 3 && currAge>18){
+                    return true;
+                }
+                return true; 
+             }
+         }
+    
     public static void main(String args[]){
         new SignUpOne();
     }
