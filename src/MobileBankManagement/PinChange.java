@@ -12,7 +12,7 @@ import java.sql.*;
  */
 public class PinChange extends JFrame implements ActionListener{
     String pinnumber , username, cardnumber;
-    JTextField currpintext, newpintext , repintext;
+    JPasswordField currpintext, newpintext , repintext;
     JButton update , back;
     
     PinChange(String username,String cardnumber , String pinnumber){
@@ -34,7 +34,7 @@ public class PinChange extends JFrame implements ActionListener{
         currpin.setBounds(100,200,300,50);
         add(currpin);
         
-        currpintext = new JTextField();
+        currpintext = new JPasswordField();
         currpintext.setFont(new Font("Arial" , Font.BOLD , 22));
         currpintext.setBounds(500,200,200,50);
         add(currpintext);
@@ -45,7 +45,7 @@ public class PinChange extends JFrame implements ActionListener{
         newpin.setBounds(100,300,300,50);
         add(newpin);
         
-        newpintext = new JTextField();
+        newpintext = new JPasswordField();
         newpintext.setFont(new Font("Arial" , Font.BOLD , 22));
         newpintext.setBounds(500,300,200,50);
         add(newpintext);
@@ -57,7 +57,7 @@ public class PinChange extends JFrame implements ActionListener{
         repin.setBounds(100,400,300,50);
         add(repin);
         
-        repintext = new JTextField();
+        repintext = new JPasswordField();
         repintext.setFont(new Font("Arial" , Font.BOLD , 22));
         repintext.setBounds(500,400,200,50);
         add(repintext);

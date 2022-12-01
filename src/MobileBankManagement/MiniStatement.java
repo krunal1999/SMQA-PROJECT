@@ -33,7 +33,7 @@ public class MiniStatement extends JFrame implements ActionListener {
         text.setBounds(500,60,900,50);
         add(text);
         
-        JLabel text1 = new JLabel("cardnumber                   Date                                                   type           amount         balance");
+        JLabel text1 = new JLabel("  Cardnumber                   Date                                               Type           Amount           Balance");
         text1.setFont(new Font("Arial" , Font.CENTER_BASELINE , 20));
         text1.setForeground(Color.white);
         text1.setBounds(60,130,900,90);
@@ -42,7 +42,7 @@ public class MiniStatement extends JFrame implements ActionListener {
         card= new JLabel();
         card.setFont(new Font("Arial" , Font.CENTER_BASELINE , 20));
         card.setForeground(Color.green);
-        card.setBounds(60,200,1200,200);
+        card.setBounds(60,200,1200,300);
         add(card);
         
         update = new JButton("Update");
@@ -101,13 +101,25 @@ public class MiniStatement extends JFrame implements ActionListener {
             Conn conn = new Conn();
             ResultSet rs = conn.s.executeQuery("select * from bank  where username='"+username+"' order by date desc limit 5");
             while(rs.next()){
-                card.setText(card.getText()+ "<html>" +rs.getString("cardnumber")+"&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                        +rs.getString("date")+" &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+rs.getString("type") +"&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                        + rs.getString("amount")+"&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +rs.getString("balance") +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>"
+                
+//                card.setText(card.getText()+ "<html> <pre>" +rs.getString("cardnumber")+"&nbsp;|&nbsp;&nbsp;&nbsp;"
+//                        +rs.getString("date")+" &nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;"+rs.getString("type") +"&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+//                        + rs.getString("amount")+"&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +rs.getString("balance") +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br> </pre>"
+//                        );
+
+                    card.setText(card.getText()+ "<html> <table> "
+                        + "<tr> <td style=\"border: 1px solid white;\">"
+                        +rs.getString("cardnumber")+"</td>"+"<td style=\"border: 1px solid white;\">"
+                        +rs.getString("date")+"</td>"+ "<td width=\"150\"style=\"border: 1px solid white;\">"
+                        +rs.getString("type")+"</td> <td width=\"150\" style=\"border: 1px solid white;\">"
+                        +rs.getString("amount")+"</td> <td width=\"150\"style=\"border: 1px solid white;\">" 
+                        + rs.getString("balance") 
+                        +"</td></tr></table>"
                         );
                 
-                
             }
+            
+            
             
         } catch (Exception e){
             System.out.println(e);
