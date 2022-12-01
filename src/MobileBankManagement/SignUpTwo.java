@@ -123,7 +123,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
             }
         
             Random random = new Random();
-            String cardnumber = "" + Math.abs((random.nextInt() % 90000000L)+ 111110000000000L);
+            String cardnumber = "" + Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
             String pinnumber = "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
             //System.out.println(cardnumber);
             //System.out.println(pinnumber);
