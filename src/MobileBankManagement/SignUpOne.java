@@ -231,7 +231,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         }
         
         String pincode = textPincode.getText();
-        System.out.println(formno);
+        //System.out.println(formno);
         
         String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
                 
