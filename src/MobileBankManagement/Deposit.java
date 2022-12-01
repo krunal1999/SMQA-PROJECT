@@ -13,12 +13,14 @@ import java.util.*;
 public class Deposit extends JFrame implements ActionListener{ 
     JTextField amountText;
     JButton deposit, back;
-    String pinnumber , cardnumber;
+    String pinnumber , username, cardnumber;
     int balance=0;
     
-    Deposit(String cardnumber,String pinnumber){
+    Deposit(String username,String cardnumber,String pinnumber){
         this.pinnumber = pinnumber;
+        this.username = username;
         this.cardnumber = cardnumber;
+        
         setLayout(null);
         
         JLabel text = new JLabel("Enter the amount to deposit");
@@ -72,23 +74,23 @@ public class Deposit extends JFrame implements ActionListener{
                 } else {
                     try{
                         Conn conn = new Conn();
-                        ResultSet rs = conn.s.executeQuery("select * from balance where pin = '" +pinnumber+ "'");
+                        ResultSet rs = conn.s.executeQuery("select * from balance where username = '" +username+ "'");
                         if(rs.next()){
-                            if(rs.getString("pin").equals(pinnumber)){
+                            if(rs.getString("username").equals(username)){
                                 balance = Integer.parseInt(rs.getString("balance"));
                                 balance += Integer.parseInt(depositamount);
                             }
                         }
 
-                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+ "')";
-                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
+                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+"','"+username+"')";
+                        String query2= "update balance set balance = '"+balance+"' where username= '"+username+"'";
                         
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
                         
-                        JOptionPane.showMessageDialog(null, ""+depositamount+ " Cash deposited successfully to account " +cardnumber);
+                        JOptionPane.showMessageDialog(null, ""+depositamount+ " Cash deposited successfully to account " +username);
                         setVisible(false);
-                        new Transactions(cardnumber, pinnumber).setVisible(true);  
+                        new Transactions(username,cardnumber, pinnumber).setVisible(true);  
                         
                     } catch (Exception er){
                         System.out.println(er);
@@ -98,7 +100,7 @@ public class Deposit extends JFrame implements ActionListener{
                 
             } else if (ae.getSource() == back){
                 setVisible(false);
-                new Transactions(cardnumber, pinnumber).setVisible(true);
+                new Transactions(username,cardnumber, pinnumber).setVisible(true);
                 
             }
         }
@@ -107,7 +109,7 @@ public class Deposit extends JFrame implements ActionListener{
     
     
     public static void main(String args[]){
-        new Deposit("","");
+        new Deposit("","","");
         
     }
     

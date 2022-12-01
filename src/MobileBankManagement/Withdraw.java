@@ -13,11 +13,13 @@ import java.util.Date;
 public class Withdraw extends JFrame implements ActionListener{ 
     JTextField amountText;
     JButton withdraw, back;
-    String pinnumber , cardnumber;
+    String pinnumber , username , cardnumber;
     int balance=0;
-    Withdraw(String cardnumber,String pinnumber){
+    Withdraw(String username,String cardnumber,String pinnumber){
         this.pinnumber = pinnumber;
+        this.username = username;
         this.cardnumber = cardnumber;
+        
         setLayout(null);
         
         JLabel text = new JLabel("Enter the amount to withdraw");
@@ -72,9 +74,9 @@ public class Withdraw extends JFrame implements ActionListener{
                     try{
                         Conn conn = new Conn();
                         
-                        ResultSet rs = conn.s.executeQuery("select * from balance where pin = '" +pinnumber+ "'");
+                        ResultSet rs = conn.s.executeQuery("select * from balance where username = '" +username+ "'");
                         if(rs.next()){
-                            if(rs.getString("pin").equals(pinnumber)){
+                            if(rs.getString("username").equals(username)){
                                 balance = Integer.parseInt(rs.getString("balance"));
                                 
                             }
@@ -87,14 +89,14 @@ public class Withdraw extends JFrame implements ActionListener{
                             balance -= Integer.parseInt(withdrawamount);
                         }
                         
-                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"')";
-                        String query2= "update balance set balance = '"+balance+"' where cardnumber = '"+cardnumber+"'";
+                        String query = "insert into bank values('"+username+"' ,'"+pinnumber+"','" +date+ "' ,'Withdraw','"+withdrawamount+"' ,'" +balance+"','"+username+"')";
+                        String query2= "update balance set balance = '"+balance+"' where username = '"+username+"'";
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
                         
-                        JOptionPane.showMessageDialog(null, ""+withdrawamount+ " Cash withdraw successfully to account " +cardnumber);
+                        JOptionPane.showMessageDialog(null, ""+withdrawamount+ " Cash withdraw successfully to account " +username);
                         setVisible(false);
-                        new Transactions(cardnumber, pinnumber).setVisible(true);  
+                        new Transactions(username, cardnumber,pinnumber).setVisible(true);  
                     } catch (Exception er){
                         System.out.println(er);
                     }
@@ -103,7 +105,7 @@ public class Withdraw extends JFrame implements ActionListener{
                 
             } else if (ae.getSource() == back){
                 setVisible(false);
-                new Transactions(cardnumber, pinnumber).setVisible(true);
+                new Transactions(username, cardnumber, pinnumber).setVisible(true);
                 
             }
         }
@@ -112,7 +114,7 @@ public class Withdraw extends JFrame implements ActionListener{
     
     
     public static void main(String args[]){
-        new Withdraw("","");
+        new Withdraw("","","");
         
     }
     

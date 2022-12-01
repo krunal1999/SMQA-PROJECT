@@ -15,20 +15,21 @@ import java.time.*;
 
 
 public class SignUpOne extends JFrame implements ActionListener{
-    long random;
+    long random ,randomforuserid;
     JTextField textFirstname , textLastname,textPincode;
     JDateChooser date;
-    JRadioButton male , female , othergender , single, married ,otherstatus ;
+    JRadioButton male , female , othergender , single, married ,otherstatus , student , employee, business, otheroccupation;
     JButton next;
     SignUpOne(){
         setLayout(null);
         
         //Genrating random number
         Random ran = new Random();
-        random = Math.abs((ran.nextLong() % 7000L) + 1000L);
+        random = Math.abs((ran.nextLong() % 9000L) + 1000L);
+        randomforuserid = Math.abs((ran.nextLong() % 9000L) + 1000L);
         
         //creating and adding Form no
-        JLabel Formno = new JLabel("Account Number :- ' " + random + " '");
+        JLabel Formno = new JLabel("Form Number :- ' " + random + " '");
         Formno.setFont(new Font("Arial" , Font.BOLD , 34));
         Formno.setBounds(300,40,500,50);
         add(Formno);
@@ -47,7 +48,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         
         textFirstname = new JTextField();
         textFirstname.setFont(new Font("Arial" , Font.PLAIN , 16));
-        textFirstname.setBounds(300,160,400,30);
+        textFirstname.setBounds(300,160,200,30);
         add(textFirstname);
         
         // creating label and textfield for lastname
@@ -58,7 +59,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         
         textLastname = new JTextField();
         textLastname.setFont(new Font("Arial" , Font.PLAIN , 16));
-        textLastname.setBounds(300,210,400,30);
+        textLastname.setBounds(300,210,200,30);
         add(textLastname);
         
         // creating label and textfield for dob
@@ -69,7 +70,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         
         date  = new JDateChooser();
         date.setFont(new Font("Arial" , Font.PLAIN , 18));
-        date.setBounds(300,260,300,30);
+        date.setBounds(300,260,200,30);
         add(date);
         
         // creating label and textfield for gender
@@ -130,16 +131,51 @@ public class SignUpOne extends JFrame implements ActionListener{
         maritialgroup.add(married);
         maritialgroup.add(otherstatus);
         
+        //creating label and textfield for occupation
+        JLabel occupationstatus  = new JLabel("Occupation Status");
+        occupationstatus.setFont(new Font("Arial" , Font.PLAIN , 20));
+        occupationstatus.setBounds(100,400,200,50);
+        add(occupationstatus);
+        
+        student = new JRadioButton("Student");
+        student.setFont(new Font("Arial" , Font.PLAIN , 20));
+        student.setBounds(300,410,120,30);
+        student.setBackground(Color.white);
+        add(student);
+        
+        employee = new JRadioButton("Employee");
+        employee.setFont(new Font("Arial" , Font.PLAIN , 20));
+        employee.setBounds(420,410,120,30);
+        employee.setBackground(Color.white);
+        add(employee);
+        
+        business = new JRadioButton("Business");
+        business.setFont(new Font("Arial" , Font.PLAIN , 20));
+        business.setBounds(540,410,140,30);
+        business.setBackground(Color.white);
+        add(business);
+        
+        otheroccupation = new JRadioButton("Other");
+        otheroccupation.setFont(new Font("Arial" , Font.PLAIN , 20));
+        otheroccupation.setBounds(680,410,140,30);
+        otheroccupation.setBackground(Color.white);
+        add(otheroccupation);
+        
+        ButtonGroup occupationalgroup = new ButtonGroup();
+        occupationalgroup.add(student);
+        occupationalgroup.add(employee);
+        occupationalgroup.add(business);
+        occupationalgroup.add(otheroccupation);
         
         // creating label and textfield for Pincode
         JLabel Pincode  = new JLabel("Pincode");
         Pincode.setFont(new Font("Arial" , Font.PLAIN , 20));
-        Pincode.setBounds(100,400,100,50);
+        Pincode.setBounds(100,450,100,50);
         add(Pincode);
         
         textPincode = new JTextField();
         textPincode.setFont(new Font("Arial" , Font.PLAIN , 16));
-        textPincode.setBounds(300,410,400,30);
+        textPincode.setBounds(300,460,200,30);
         add(textPincode);
         
         
@@ -161,6 +197,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         
     public void actionPerformed(ActionEvent e){
         String formno = random+"";  // long vlaue
+        String userid = randomforuserid+"";
         String firstname = textFirstname.getText();
         String lastname = textLastname.getText();
         String dob =((JTextField) date.getDateEditor().getUiComponent()).getText();
@@ -182,20 +219,36 @@ public class SignUpOne extends JFrame implements ActionListener{
             marital = "Ohter";
         }
         
-        String pin = textPincode.getText();
+        String occupation = null;
+        if(student.isSelected()){
+            occupation = "Student";
+        } else if (employee.isSelected()){
+            occupation = "Employee";
+        } else if (business.isSelected()){
+            occupation = "Business";
+        } else if (otheroccupation.isSelected()){
+            occupation="Other";
+        }
+        
+        String pincode = textPincode.getText();
         System.out.println(formno);
+        
+        String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
+                
         //validating inserted data
         try{
-            if(firstname.equals("") || lastname.equals("") || dob.equals("") || gender.equals("") || marital.equals("") || pin.equals("") ){
-            JOptionPane.showMessageDialog(null, "Detials are missing.");
+            if(firstname.equals("") || lastname.equals("") || dob.equals("") || gender.equals("") || marital.equals("") || occupation.equals("") || pincode.equals("") ){
+            JOptionPane.showMessageDialog(null, "Please fill all details");
         } else{
             Conn c = new Conn();
-            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+dob+"','"+gender+"','"+marital+"','"+pin+"')";
+            
+            
+            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+dob+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";
             c.s.executeUpdate(query);
             
             //signuptwo object
             setVisible(false);
-            new SignUpTwo(formno).setVisible(true);
+            new SignUpTwo(formno,username).setVisible(true);
             
             
             }  
