@@ -132,11 +132,26 @@ public class SignUpTwo extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
             }else{
               Random random = new Random();
-            String cardnumber = "" + Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
-            String pinnumber = "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
-            //System.out.println(cardnumber);
-            //System.out.println(pinnumber);
-       
+              
+            String tempcardnumber , temppinnumber;
+            String cardnumber,pinnumber;
+            
+            //sometimes random function give one digit less in card number and pin so we are validating it.
+            tempcardnumber =""+ Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
+            if(tempcardnumber.length() < 16){
+                tempcardnumber = tempcardnumber+2;
+                cardnumber = tempcardnumber;
+            }else{
+                cardnumber = tempcardnumber;
+            }
+            
+            temppinnumber= "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
+            if(temppinnumber.length() < 4){
+                pinnumber = "9999";
+                
+            }else{
+                pinnumber = temppinnumber;
+            }
             try{
                 if(accountType.equals("")){  //false && false , false || false
                    JOptionPane.showMessageDialog(null, "Details are missing");
