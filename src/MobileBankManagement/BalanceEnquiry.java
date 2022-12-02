@@ -53,7 +53,9 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
             
             if(rs.next()){
 
-                         card.setText(rs.getString("username") + " Your " +rs.getString("accountType") + " has Balance of " +rs.getString("balance") + "pounds");
+                         card.setText(rs.getString("username") + " Your " 
+                                 +rs.getString("accountType") + " has Balance of " 
+                                 +rs.getString("balance") + "pounds");
                         
             }
            

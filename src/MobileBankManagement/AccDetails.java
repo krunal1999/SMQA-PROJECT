@@ -52,11 +52,15 @@ public class AccDetails extends JFrame implements ActionListener {
             
             if(rs.next()){
 
-                         card.setText(card.getText()+ "<html> <table style=\"border: 1px solid white;\"> <tr> <th style=\"border: 1px solid white;\">Firstname </th><th style=\"border: 1px solid white;\">Lastname </th><th style=\"border: 1px solid white;\">Dob </th><th style=\"border: 1px solid white;\">Gender </th><th style=\"border: 1px solid white;\">Marital </th><th style=\"border: 1px solid white;\">Occupation </th><th style=\"border: 1px solid white;\">pincode </th></tr> "
-                        + "<tr> <td style=\"border: 1px solid white;\">"+rs.getString("firstname")+"</td>"+"<td style=\"border: 1px solid white;\">"+rs.getString("lastname")+"</td>"
-                        + "<td style=\"border: 1px solid white;\">"+rs.getString("dob")+"</td> <td style=\"border: 1px solid white;\">"+rs.getString("gender")+"</td> <td style=\"border: 1px solid white;\">" + rs.getString("marital")
-                        +"</td> <td style=\"border: 1px solid white;\">" + rs.getString("occupation")+"</td> <td style=\"border: 1px solid white;\">" + rs.getString("pincode")+
-                                            "</td></tr></table></html>"
+                         card.setText(card.getText()+ "<html> <table style=\"border: 1px solid white;\"> <tr> <th style=\"border: 1px solid white;\">Firstname </th><th style=\"border: 1px solid white;\">Lastname </th><th style=\"border: 1px solid white;\">Age </th><th style=\"border: 1px solid white;\">Gender </th><th style=\"border: 1px solid white;\">Marital </th><th style=\"border: 1px solid white;\">Occupation </th><th style=\"border: 1px solid white;\">pincode </th></tr> "
+                        + "<tr> <td style=\"border: 1px solid white;\">"
+                        +rs.getString("firstname")+"</td>"+"<td style=\"border: 1px solid white;\">"
+                        +rs.getString("lastname")+"</td>"+ "<td style=\"border: 1px solid white;\">"
+                        +rs.getString("age")+"</td> <td style=\"border: 1px solid white;\">"
+                        +rs.getString("gender")+"</td> <td style=\"border: 1px solid white;\">" 
+                        + rs.getString("marital")+"</td> <td style=\"border: 1px solid white;\">" 
+                        + rs.getString("occupation")+"</td> <td style=\"border: 1px solid white;\">" 
+                        + rs.getString("pincode")+ "</td></tr></table></html>"
                         );
             }
            
