@@ -277,7 +277,8 @@ public class SignUpOne extends JFrame implements ActionListener{
                  JOptionPane.showMessageDialog(null, "age should be above 18");
              }
          else{
-            String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
+            String username = createUser(firstname, lastname, formno,userid);
+                 //System.out.println(username);
             Conn c = new Conn();
             String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+age+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";
              
@@ -326,7 +327,11 @@ public class SignUpOne extends JFrame implements ActionListener{
                 return true; 
              }
          }
-    
+    public static String createUser(String firstname, String lastname , String formno , String userid){
+      String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
+      return username;
+    }
+
     public static void main(String args[]){
         new SignUpOne();
     }

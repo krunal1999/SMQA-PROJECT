@@ -18,6 +18,7 @@ public class Transactions extends JFrame implements ActionListener{
         this.pinnumber = pinnumber;
         this.cardnumber = cardnumber;
         
+        //frontend start
         setLayout(null);
         setTitle("Transactions Menu");
         
@@ -97,7 +98,7 @@ public class Transactions extends JFrame implements ActionListener{
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     
-            
+        //frontend ends
         }
         
         public void actionPerformed(ActionEvent ae){
