@@ -68,10 +68,15 @@ public class Withdraw extends JFrame implements ActionListener{
             if(ae.getSource() == withdraw){
                 String withdrawamount = amountText.getText();
                 Date date = new Date();
-                if(withdrawamount.equals("")){
-                    JOptionPane.showMessageDialog(null, "Enter the amount to withdraw");
+                boolean withdrawcheck = withdrawCheck(withdrawamount, 7);
+                
+                if(!withdrawcheck){
+                    JOptionPane.showMessageDialog(null, "Withdraw cant be empty or Please enter digits");
                 } else {
-                    try{
+                    if(!minimumWithdraw(withdrawamount) || !checkMultiple(withdrawamount)){
+                        JOptionPane.showMessageDialog(null, "Minimum withdraw is 20 pounds and Multiple of 10");
+                    }else{
+                        try{
                         Conn conn = new Conn();
                         
                         ResultSet rs = conn.s.executeQuery("select * from balance where username = '" +username+ "'");
@@ -100,7 +105,7 @@ public class Withdraw extends JFrame implements ActionListener{
                     } catch (Exception er){
                         System.out.println(er);
                     }
-                    
+                    }
                 }
                 
             } else if (ae.getSource() == back){
@@ -109,8 +114,45 @@ public class Withdraw extends JFrame implements ActionListener{
                 
             }
         }
-
         
+            public static boolean withdrawCheck(String amount,int length) {
+             int i;
+             String j;
+             if (amount == null || amount.length()>length) {
+                return false;
+            }else{
+                try {
+                     i = Integer.parseInt(amount);
+                }catch (NumberFormatException nfe) {
+                    return false;
+                } 
+                if(length <= 7){
+                    
+                    return true;
+                }
+                return true; 
+             }
+         }
+        
+        
+        public static boolean minimumWithdraw(String amount){
+            int value = Integer.parseInt(amount);
+            if(value <= 20){
+                return false;
+            }else{
+                return true;
+
+            }
+
+        }
+        public static boolean checkMultiple(String amount){
+            int value = Integer.parseInt(amount);
+            if(value%10 != 0){
+                return false;
+            }else{
+                return true;
+            }
+        }
     
     
     public static void main(String args[]){

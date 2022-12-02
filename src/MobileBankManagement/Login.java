@@ -141,7 +141,7 @@ public class Login extends JFrame implements ActionListener{
             new SignUpOne().setVisible(true);
             
         } 
-        //if user click on admin
+        //if user click on adminJOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");
         else if(e.getSource() == admin){
             
             String username = accnumtext.getText();

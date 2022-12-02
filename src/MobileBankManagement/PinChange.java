@@ -51,7 +51,7 @@ public class PinChange extends JFrame implements ActionListener{
         add(newpintext);
         
         
-        JLabel repin = new JLabel("Enter current pin");
+        JLabel repin = new JLabel("Reenter new pin");
         repin.setFont(new Font("Arial" , Font.CENTER_BASELINE , 22));
         repin.setForeground(Color.green);
         repin.setBounds(100,400,300,50);
@@ -99,7 +99,17 @@ public class PinChange extends JFrame implements ActionListener{
             String checkpin = currpintext.getText();
             String nextpin = newpintext.getText();
             String repin = repintext.getText();
-            System.out.println(pinnumber);
+            boolean pincheck = pinCheck(checkpin, checkpin.length());
+            boolean nextcheck = pinCheck(nextpin, nextpin.length());
+            boolean recheck = pinCheck(repin, repin.length());
+            
+            if(!pincheck){
+                JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin in current pin");
+            }else if(!nextcheck){
+                JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin in new pin");
+            }else if(!recheck){
+                JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin reenter pin");
+            }else{
             if(checkpin.equals(pinnumber)){
                 if(nextpin.equals(repin)){
                     //to do
@@ -125,14 +135,30 @@ public class PinChange extends JFrame implements ActionListener{
             } else {
                 JOptionPane.showMessageDialog(null, "Current pin does not match");
             }
-            
+        }
         } else{
             setVisible(false);
             new Transactions(username,cardnumber,pinnumber).setVisible(true);
         }
         
     }
-    
+    public static boolean pinCheck(String pinnumber,int length) {
+             int i;
+             String j;
+             if (pinnumber == null || length<4 || length>4) {
+                return false;
+            }else{
+                try {
+                     i = Integer.parseInt(pinnumber);
+                }catch (NumberFormatException nfe) {
+                    return false;
+                } 
+                if(length == 4){
+                    return true;
+                }
+                return true; 
+             }
+         }
     
     public static void main(String args[]){
         new PinChange("","","");
