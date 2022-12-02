@@ -11,12 +11,14 @@ import java.sql.*;
  * @author krunal
  */
 public class Login extends JFrame implements ActionListener{
+    //Global variables
     JButton signin , signup , admin;
     JTextField accnumtext ;
     JPasswordField PasswordText;
     
-    
+    //default Constructor to build frontend start
     Login(){
+        
         setTitle("Money Bank");
         setLayout(null);
         getContentPane().setBackground(Color.white);
@@ -30,12 +32,13 @@ public class Login extends JFrame implements ActionListener{
         add(logolabel);
         
         
-        //adding username and password labels and text fields
+        //heading
         JLabel text = new JLabel("Welcome to Mobile Bank");
         text.setFont(new Font("Georgia" , Font.BOLD , 54));
         text.setBounds(250, 40, 800, 140);
         add(text);
         
+        //adding username and password labels and text fields
         JLabel accnum = new JLabel("Username");
         accnum.setFont(new Font("Arial" , Font.BOLD , 32));
         accnum.setBounds(200, 240, 400, 30);
@@ -86,22 +89,36 @@ public class Login extends JFrame implements ActionListener{
         setLocation(200, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
+        //frontend ends 
     }
     
-    @Override
+    //Action Listner on click on buttons
     public void actionPerformed(ActionEvent e){
+        
         if(e.getSource() == signin){
+            //if user clicks on signin
+            
             Conn conn = new Conn();
             String username = accnumtext.getText();
-            String pinnumber = PasswordText.getText();
+            String pinnumber = PasswordText.getText(); //this method is deprecated 
             String cardnumber;
             
+            //check if entered pin is valid or not and return true or false
+            boolean pincheck = pinCheck(pinnumber,pinnumber.length());
+            boolean usercheck = userCheck(username, username.length());
+            
+            if(!usercheck){
+                JOptionPane.showMessageDialog(null, "Please enter 7 charater username");
+            }else if(!pincheck) {
+                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");   
+            }
+            else{ 
+            //mysql query to select username and pin from Login table
             String query = "select * from login where username = '"+username+"' and pin = '" +pinnumber+ "'";
             
             try{
+                //to store result object return by mysql
                 ResultSet rs = conn.s.executeQuery(query);
-                
-                 
                 
                 if(rs.next()){
                     cardnumber = rs.getString("cardnumber");
@@ -114,19 +131,69 @@ public class Login extends JFrame implements ActionListener{
             }catch (Exception er){
                 System.out.println(er);
             }
+            }
             
-        } else if(e.getSource() == signup){
+        } 
+        //if user click on signup
+        else if(e.getSource() == signup){
+            
             setVisible(false);
             new SignUpOne().setVisible(true);
-        } else if(e.getSource() == admin){
             
+        } 
+        //if user click on admin
+        else if(e.getSource() == admin){
+            
+            String username = accnumtext.getText();
+            String pinnumber = PasswordText.getText(); //this method is deprecated 
+            String cardnumber;
+            
+            //check if entered pin is valid or not and return true or false
+            boolean pincheck = pinCheck(pinnumber,pinnumber.length());
+            boolean usercheck = userCheck(username, username.length());
+            
+            if(!usercheck){
+                JOptionPane.showMessageDialog(null, "Please enter 7 charater username");
+            }else if(!pincheck) {
+                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");   
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "You are not admin");
+            }
+   
         }
     }
-    
+        //pin checking and return boolean true or false
+        public static boolean pinCheck(String pinnumber,int length) {
+             int i;
+             String j;
+             if (pinnumber == null || length<4 || length>4) {
+                return false;
+            }else{
+                try {
+                     i = Integer.parseInt(pinnumber);
+                }catch (NumberFormatException nfe) {
+                    return false;
+                } 
+                if(length == 4){
+                    return true;
+                }
+                return true; 
+             }
+         }
+        //username checking and return boolean true or false
+        public static boolean userCheck(String username,int length) {
+             if (username == null || length<7 || length>7) {
+                return false;
+            }else{
+                if(length == 7){
+                    return true;
+                }
+                return true; 
+             }
+         }
+
     public static void main(String args[]){
         new Login();
     }
-    
-            
-    
 }
