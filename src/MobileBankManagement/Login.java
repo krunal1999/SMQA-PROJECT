@@ -16,9 +16,10 @@ public class Login extends JFrame implements ActionListener{
     JTextField accnumtext ;
     JPasswordField PasswordText;
     
-    //default Constructor to build frontend start
-    Login(){
-        
+    
+   
+    
+    private void mainFreame(){
         setTitle("Money Bank");
         setLayout(null);
         getContentPane().setBackground(Color.white);
@@ -74,6 +75,7 @@ public class Login extends JFrame implements ActionListener{
         signup.setBackground(Color.GREEN);
         signup.setForeground(Color.white);
         signup.addActionListener(this);
+        
         add(signup);
         
         admin = new JButton("ADMIN LOGIN");
@@ -89,81 +91,102 @@ public class Login extends JFrame implements ActionListener{
         setLocation(200, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        //frontend ends 
+    }
+    Login(){
+       mainFreame();
     }
     
-    //Action Listner on click on buttons
-    public void actionPerformed(ActionEvent e){
-        
-        if(e.getSource() == signin){
-            //if user clicks on signin
-            
-            Conn conn = new Conn();
+    
+    public void actionPerformed(ActionEvent ae){
+        if (ae.getSource() == signin){
             String username = accnumtext.getText();
             String pinnumber = PasswordText.getText(); //this method is deprecated 
-            String cardnumber;
+            signIn(username, pinnumber);
+            //setVisible(false);
+        } else if (ae.getSource() == signup){
+                setVisible(false); 
+                signUp();
+        }else if (ae.getSource() == admin){
+            String username = accnumtext.getText();
+            String pinnumber = PasswordText.getText(); //this method is deprecated 
             
-            //check if entered pin is valid or not and return true or false
-            boolean pincheck = pinCheck(pinnumber,pinnumber.length());
-            boolean usercheck = userCheck(username, username.length());
-            
-            if(!usercheck){
-                JOptionPane.showMessageDialog(null, "Please enter 7 charater username");
-            }else if(!pincheck) {
-                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");   
-            }
-            else{ 
-            //mysql query to select username and pin from Login table
-            String query = "select * from login where username = '"+username+"' and pin = '" +pinnumber+ "'";
-            
-            try{
-                //to store result object return by mysql
-                ResultSet rs = conn.s.executeQuery(query);
-                
-                if(rs.next()){
-                    cardnumber = rs.getString("cardnumber");
-                    setVisible(false);
-                    new Transactions(username ,cardnumber ,pinnumber).setVisible(true);
-                }else {
-                    JOptionPane.showMessageDialog(null, "Incorrect Username or Pin");
-                }
-                
-            }catch (Exception er){
-                System.out.println(er);
-            }
-            }
-            
-        } 
-        //if user click on signup
-        else if(e.getSource() == signup){
-            
-            setVisible(false);
+            adminEvent(username, pinnumber);
+        }
+    }
+    
+    public static boolean signUp(){
             new SignUpOne().setVisible(true);
-            
-        } 
-        //if user click on adminJOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");
-        else if(e.getSource() == admin){
-            
-            String username = accnumtext.getText();
-            String pinnumber = PasswordText.getText(); //this method is deprecated 
+            return true;
+    }
+    public static boolean adminEvent(String username, String pinnumber){
             String cardnumber;
-            
             //check if entered pin is valid or not and return true or false
-            boolean pincheck = pinCheck(pinnumber,pinnumber.length());
-            boolean usercheck = userCheck(username, username.length());
+            boolean pincheck = true; //pinCheck(pinnumber,pinnumber.length());
+            boolean usercheck = true;//userCheck(username, username.length());
             
             if(!usercheck){
-                JOptionPane.showMessageDialog(null, "Please enter 7 charater username");
+                JOptionPane.showMessageDialog(null, "Please Enter valid username");
             }else if(!pincheck) {
                  JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");   
             }
             else{
-                JOptionPane.showMessageDialog(null, "You are not admin");
+                
+                    JOptionPane.showMessageDialog(null, "You are not admin");
+                 
+                
             }
-   
-        }
+            return false;
     }
-        //pin checking and return boolean true or false
+    public boolean signIn(String username, String pinnumber){
+            
+            String cardnumber="";
+            boolean check=false;
+            //check if entered pin is valid or not and return true or false
+            boolean pincheck = pinCheck(pinnumber,pinnumber.length());
+            boolean usercheck = userCheck(username, username.length());
+            
+            if(!usercheck){
+                JOptionPane.showMessageDialog(null, "Please enter valid username");
+                
+            }else if(!pincheck) {
+                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin");  
+                 
+            }
+            else{ 
+            
+                if(checkConnection(username,pinnumber,cardnumber)){
+                    JOptionPane.showMessageDialog(null, "login successfull");
+                    setVisible(false);
+                    check = true;
+                }else {
+                    JOptionPane.showMessageDialog(null, "Incorrect Username or Pin");
+                    }
+        }   
+            //new Demo();
+            return check;
+    }  
+    public  boolean checkConnection(String username,String pinnumber,String cardnumber){
+        //mysql query to select username and pin from Login table
+        try{    
+                Conn conn = new Conn();
+                String query = "select * from login where username = '"+username+"' and pin = '" +pinnumber+ "'";
+                //to store result object return by mysql
+                ResultSet rs = conn.s.executeQuery(query);
+                if(rs.next()){
+                    cardnumber = rs.getString("cardnumber");
+                    new Transactions(username ,cardnumber ,pinnumber).setVisible(true);
+                    return true;
+                }
+                else{
+                   return false;
+                }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+               return false;
+    }
+      
+    //pin checking and return boolean true or false
         public static boolean pinCheck(String pinnumber,int length) {
              int i;
              String j;
@@ -187,13 +210,34 @@ public class Login extends JFrame implements ActionListener{
                 return false;
             }else{
                 if(length == 7){
-                    return true;
+                    String first3char = username.substring(0, 3);
+                    String last4char = username.substring(3);
+                    
+                    if(isString(first3char) && first3char.length() == 3){
+                        //System.out.println(first3char);
+                        if(isNumber(last4char) && last4char.length() == 4){
+                        //System.out.println(last4char);
+                        return true;
+                    }
+                    }
+                    else{
+                        return false;
+                    }
                 }
-                return true; 
+               return false;
              }
          }
+        
+        public static boolean isString(String name) {
+            return name.matches("[a-zA-Z]+");
+        }
+        public static boolean isNumber(String name) {
+            return name.matches("[0-9]+");
+        }
 
     public static void main(String args[]){
         new Login();
     }
+
+    
 }
