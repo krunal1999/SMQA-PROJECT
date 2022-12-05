@@ -15,12 +15,8 @@ public class PinChange extends JFrame implements ActionListener{
     JPasswordField currpintext, newpintext , repintext;
     JButton update , back;
     
-    PinChange(String username,String cardnumber , String pinnumber){
-       setLayout(null); 
-       
-       this.pinnumber = pinnumber;
-       this.username = username;
-       this.cardnumber = cardnumber;
+    private void mainFrame(){
+        setLayout(null); 
        
         JLabel text = new JLabel("Change Pin");
         text.setFont(new Font("Arial" , Font.CENTER_BASELINE , 44));
@@ -92,6 +88,15 @@ public class PinChange extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
+    PinChange(String username,String cardnumber , String pinnumber){
+       
+       this.pinnumber = pinnumber;
+       this.username = username;
+       this.cardnumber = cardnumber;
+       
+       mainFrame();
+    }
+    
     
     
     public void actionPerformed(ActionEvent ae){
@@ -112,23 +117,15 @@ public class PinChange extends JFrame implements ActionListener{
             }else{
             if(checkpin.equals(pinnumber)){
                 if(nextpin.equals(repin)){
-                    //to do
-                    try{
-                        Conn conn = new Conn();
-                        String query1= "update login set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
-                        String query2= "update bank set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
-                        String query3= "update balance set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
-                        conn.s.executeUpdate(query1);
-                        conn.s.executeUpdate(query2);
-                        conn.s.executeUpdate(query3);
-                        JOptionPane.showMessageDialog(null, "Pin changed successfully");
+                    if(checkConnection(nextpin, checkpin)){
+                        
                         setVisible(false);
                         new Transactions(username,cardnumber, nextpin).setVisible(true);
-
-                    } catch (Exception er){
-                        System.out.println(er);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Pin change failed");
+                        setVisible(false);
+                        new Transactions(username,cardnumber,pinnumber).setVisible(true);
                     }
-                                        
                 }else{
                     JOptionPane.showMessageDialog(null, "New Pin and Reenter pin does not match");
                 }
@@ -139,12 +136,13 @@ public class PinChange extends JFrame implements ActionListener{
         } else{
             setVisible(false);
             new Transactions(username,cardnumber,pinnumber).setVisible(true);
+            
         }
         
     }
     public static boolean pinCheck(String pinnumber,int length) {
              int i;
-             String j;
+             
              if (pinnumber == null || length<4 || length>4) {
                 return false;
             }else{
@@ -159,6 +157,27 @@ public class PinChange extends JFrame implements ActionListener{
                 return true; 
              }
          }
+    
+    public boolean checkConnection(String nextpin , String checkpin){
+        if(nextpin.equals("") || checkpin.equals("")){
+            return false;
+        }else{
+        try{
+                        Conn conn = new Conn();
+                        String query1= "update login set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
+                        String query2= "update bank set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
+                        String query3= "update balance set pin = '"+nextpin+"' where pin = '"+checkpin+"'";
+                        conn.s.executeUpdate(query1);
+                        conn.s.executeUpdate(query2);
+                        conn.s.executeUpdate(query3);
+                        JOptionPane.showMessageDialog(null, "Pin changed successfully");
+                        return true;
+                    } catch (Exception er){
+                        System.out.println(er);
+                        return false;
+                    }
+        }
+    }
     
     public static void main(String args[]){
         new PinChange("","","");

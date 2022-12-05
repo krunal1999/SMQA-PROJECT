@@ -214,8 +214,8 @@ public class SignUpOne extends JFrame implements ActionListener{
         
         String formno = random+"";  // long vlaue
         String userid = randomforuserid+"";
-        String firstname = textFirstname.getText();
-        String lastname = textLastname.getText();
+        String firstname = textFirstname.getText().toLowerCase();
+        String lastname = textLastname.getText().toLowerCase();
         String age = agetext.getText();
         
         formno=checkRandomnumber(formno);
@@ -250,7 +250,7 @@ public class SignUpOne extends JFrame implements ActionListener{
             occupation="Other";
         }
         
-        String pincode = textPincode.getText();
+        String pincode = textPincode.getText().toLowerCase();
         
         boolean firstnamecheck= inputCheck(firstname , firstname.length());
         boolean lastnamecheck = inputCheck(lastname ,firstname.length());

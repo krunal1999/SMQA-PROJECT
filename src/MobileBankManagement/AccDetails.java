@@ -16,14 +16,8 @@ public class AccDetails extends JFrame implements ActionListener {
     
     String username, cardnumber, pinnumber;
     JButton back;
-
-    public AccDetails(String username, String cardnumber , String pinnumber) {
-        
-        setLayout(null);
-        
-        this.cardnumber=cardnumber;
-        this.pinnumber=pinnumber;
-        this.username=username;
+    JLabel card;
+    private void mainFrame(){
         
         JLabel text = new JLabel("Account Details");
         text.setFont(new Font("Arial" , Font.CENTER_BASELINE , 44));
@@ -31,7 +25,7 @@ public class AccDetails extends JFrame implements ActionListener {
         text.setBounds(500,60,900,50);
         add(text);
         
-        JLabel card= new JLabel();
+        card= new JLabel();
         card.setFont(new Font("Arial" , Font.CENTER_BASELINE , 24));
         card.setForeground(Color.green);
         card.setBounds(100,200,900,200);
@@ -46,6 +40,42 @@ public class AccDetails extends JFrame implements ActionListener {
         back.addActionListener(this);
         add(back);
         
+        getContentPane().setBackground(Color.DARK_GRAY);
+        setSize(1280 , 780);
+        
+        setLocation(200, 200);
+        setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+  
+    }
+
+     AccDetails(String username, String cardnumber , String pinnumber) {
+        
+        setLayout(null);
+        
+        this.cardnumber=cardnumber;
+        this.pinnumber=pinnumber;
+        this.username=username;
+        
+        mainFrame();
+            if(checkConnection(username)){
+                JOptionPane.showMessageDialog(null, "User detials fetched");
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "User not found");
+            }
+          
+    }
+    
+    public void actionPerformed(ActionEvent ae){
+        if (ae.getSource() == back){
+                setVisible(false);
+                new Transactions(username, cardnumber, pinnumber).setVisible(true);
+                
+            }
+    }
+    
+    public boolean checkConnection(String Username){
         try{
             Conn conn = new Conn();
             ResultSet rs = conn.s.executeQuery("select * from signup where username='"+username+"'");
@@ -62,35 +92,15 @@ public class AccDetails extends JFrame implements ActionListener {
                         + rs.getString("occupation")+"</td> <td style=\"border: 1px solid white;\">" 
                         + rs.getString("pincode")+ "</td></tr></table></html>"
                         );
+                        return true;
+       
             }
-           
-            
-        } catch (Exception e){
+        }catch (Exception e){
             System.out.println(e);
+            return false;
         }
-    
-        getContentPane().setBackground(Color.DARK_GRAY);
-        setSize(1280 , 780);
-        
-        setLocation(200, 200);
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-    
-            
-          
+        return false;
     }
-    
-    public void actionPerformed(ActionEvent ae){
-        if (ae.getSource() == back){
-                setVisible(false);
-                new Transactions(username, cardnumber, pinnumber).setVisible(true);
-                
-            }
-    }
-    
-    
-    
-    
     
     public static void main(String args[]){
         new AccDetails("","","");

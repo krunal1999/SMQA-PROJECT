@@ -99,7 +99,7 @@ public class Login extends JFrame implements ActionListener{
     
     public void actionPerformed(ActionEvent ae){
         if (ae.getSource() == signin){
-            String username = accnumtext.getText();
+            String username = accnumtext.getText().toLowerCase();
             String pinnumber = PasswordText.getText(); //this method is deprecated 
             signIn(username, pinnumber);
             //setVisible(false);

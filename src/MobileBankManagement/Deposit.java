@@ -14,7 +14,7 @@ public class Deposit extends JFrame implements ActionListener{
     JTextField amountText;
     JButton deposit, back;
     String pinnumber , username, cardnumber;
-    int balance=0;
+    int balance=0 , interestamt=0;
     String depositamount;
     Date date;
             
@@ -81,7 +81,7 @@ public class Deposit extends JFrame implements ActionListener{
                     if(!minimumBalance(depositamount) || !checkMultiple(depositamount)){
                         JOptionPane.showMessageDialog(null, "Minimum Deposit is 50 pounds and Please enter amount in multiple of 5");
                     }else{
-                        if(checkConnection(username, balance, depositamount, cardnumber, pinnumber, date)){
+                        if(checkConnection(username, balance, depositamount, cardnumber, pinnumber, date , interestamt)){
                             JOptionPane.showMessageDialog(null, "Amount has been deposited");
                         }else{
                             JOptionPane.showMessageDialog(null, "Amount has not been deposited");
@@ -99,7 +99,7 @@ public class Deposit extends JFrame implements ActionListener{
             return true;
         }
     
-        public boolean checkConnection(String username, int balance, String depositamount , String cardnumber, String pinnumber , Date date ){
+        public boolean checkConnection(String username, int balance, String depositamount , String cardnumber, String pinnumber , Date date , int interestamt ){
             try{
                         Conn conn = new Conn();
                         ResultSet rs = conn.s.executeQuery("select balance.* , login.* from balance , login where balance.username='"+username+"' and login.username='"+username+"'");
@@ -109,18 +109,21 @@ public class Deposit extends JFrame implements ActionListener{
                                 if(rs.getString("accountType").equals("Saving Account")){
                                     balance = Integer.parseInt(rs.getString("balance"));
                                     balance += Integer.parseInt(depositamount);
-                                    balance += interest("Saving Account");
+                                    interestamt = interest("Saving Account");
+                                    balance += interestamt ;
                                 
                             }else{
                                     balance = Integer.parseInt(rs.getString("balance"));
                                     balance += Integer.parseInt(depositamount);
-                                    balance += interest("Current Account");                                     
+                                    interestamt = interest("Current Account");  
+                                    balance += interestamt ;
+
                                 }
                                 
                             }
                         }
 
-                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+"','"+username+"')";
+                        String query = "insert into bank values('"+cardnumber+"' ,'"+pinnumber+"','" +date+ "' ,'Deposit','"+depositamount+"','" +balance+"','"+username+"' , '"+interestamt+"')";
                         String query2= "update balance set balance = '"+balance+"' where username= '"+username+"'";
                         
                         conn.s.executeUpdate(query);
