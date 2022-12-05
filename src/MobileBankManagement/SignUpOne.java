@@ -19,10 +19,10 @@ public class SignUpOne extends JFrame implements ActionListener{
     JButton next , back;
     
     //default constructor
-    SignUpOne(){
-        setLayout(null);
-        
+    private void mainFrame(){
         //Genrating random number
+         setLayout(null);
+
         Random ran = new Random();
         random = Math.abs((ran.nextLong() % 9000L) + 1000L);
         randomforuserid = Math.abs((ran.nextLong() % 9000L) + 1000L);
@@ -202,6 +202,11 @@ public class SignUpOne extends JFrame implements ActionListener{
         setLocation(200, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
+    SignUpOne(){
+        mainFrame();
+        
+    }
+    
         
     public void actionPerformed(ActionEvent ae){
         //if user click on next
@@ -212,7 +217,9 @@ public class SignUpOne extends JFrame implements ActionListener{
         String firstname = textFirstname.getText();
         String lastname = textLastname.getText();
         String age = agetext.getText();
-       
+        
+        formno=checkRandomnumber(formno);
+        userid=checkRandomnumber(userid);
         
         String gender = null;
         if(male.isSelected()){
@@ -252,7 +259,7 @@ public class SignUpOne extends JFrame implements ActionListener{
         boolean maritalcheck = inputCheck(marital , 5);
         boolean occupationcheck = inputCheck(occupation,5);
         boolean pincodecheck = inputCheck(pincode, pincode.length());
-        System.out.println(firstnamecheck);
+        //System.out.println(firstnamecheck);
                 
         if(!firstnamecheck){  
             JOptionPane.showMessageDialog(null, "firstname cant be empty and minimum length should be greater than 3");
@@ -268,6 +275,12 @@ public class SignUpOne extends JFrame implements ActionListener{
             JOptionPane.showMessageDialog(null, "occupation cant be empty");
         }else if(!pincodecheck){
             JOptionPane.showMessageDialog(null, "pincode number cant be empty");
+        }else if(!isString(firstname)){
+            JOptionPane.showMessageDialog(null, "Firstname should be character");
+        }else if(!isString(lastname)){
+            JOptionPane.showMessageDialog(null, "Lastname should be character");
+        }else if(!isNumber(age)){
+            JOptionPane.showMessageDialog(null, "Age should be digit");
         }
         else{
          if(agecheck){
@@ -277,29 +290,53 @@ public class SignUpOne extends JFrame implements ActionListener{
                  JOptionPane.showMessageDialog(null, "age should be above 18");
              }
          else{
-            String username = createUser(firstname, lastname, formno,userid);
-                 //System.out.println(username);
-            Conn c = new Conn();
-            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+age+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";
-             
-        //validating inserted data
-        try{
-            c.s.executeUpdate(query);
-            
-            //signuptwo object
-            setVisible(false);
-            new SignUpTwo(formno,username).setVisible(true);
-            
-        } catch (Exception e){
-            System.out.println(e);
+              if(checkConnection(firstname, lastname,  formno , userid , age, gender,  marital ,  occupation , pincode)){
+                JOptionPane.showMessageDialog(null, "Form completed succefully");
+                setVisible(false);
+              }else{
+                  JOptionPane.showMessageDialog(null, "Login again");
+                  new SignUpOne();
+              }
+            }        
         }
-             }        
-         }
         }
         
         } else if(ae.getSource() == back){
+            backBtn();
             setVisible(false);
-            new Login();
+
+        }
+    }
+    public String checkRandomnumber(String random){
+        if(random.length() <=3){
+            if(random.equals("")){
+                random="2341";
+            }else{
+            int formnoInt = Integer.parseInt(random);
+            formnoInt += 1000;
+            random = formnoInt+"";
+            }
+        }
+        return random;
+    }
+    public static boolean  backBtn(){
+        new Login();
+        return true;
+    }
+    public boolean checkConnection(String firstname, String lastname, String formno ,String userid ,String age,String gender, String marital , String occupation , String pincode){
+        
+        try{
+            String username = createUser(firstname, lastname, formno,userid);
+            //System.out.println(username);
+            Conn c = new Conn();
+            String query = "insert into signup values('"+formno+"', '"+firstname+"', '"+lastname+"', '"+age+"','"+gender+"','"+marital+"','"+occupation+"','"+pincode+"','"+username+"')";    
+            //validating inserted data
+            c.s.executeUpdate(query);
+            new SignUpTwo(formno,username).setVisible(true);
+            return true;
+        } catch (Exception e){
+            System.out.println(e);
+            return false;
         }
     }
     
@@ -329,9 +366,44 @@ public class SignUpOne extends JFrame implements ActionListener{
          }
     public static String createUser(String firstname, String lastname , String formno , String userid){
       String username = firstname.substring(0,2)+lastname.substring(0,1) +formno.substring(2) +userid.substring(2);
-      return username;
+      if(userCheck(username , username.length())){
+          return username;
+      }else{
+          new SignUpOne();
+          return username;
+      }
+      
     }
-
+    public static boolean userCheck(String username,int length) {
+             if (username == null || length<7 || length>7) {
+                return false;
+            }else{
+                if(length == 7){
+                    String first3char = username.substring(0, 3);
+                    String last4char = username.substring(3);
+                    
+                    if(isString(first3char) && first3char.length() == 3){
+                        //System.out.println(first3char);
+                        if(isNumber(last4char) && last4char.length() == 4){
+                        //System.out.println(last4char);
+                        return true;
+                    }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+               return false;
+             }
+         }
+        
+        public static boolean isString(String name) {
+            return name.matches("[a-zA-Z]+");
+        }
+        public static boolean isNumber(String name) {
+            return name.matches("[0-9]+");
+        }
+        
     public static void main(String args[]){
         new SignUpOne();
     }
