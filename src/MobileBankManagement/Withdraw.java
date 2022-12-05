@@ -15,10 +15,16 @@ public class Withdraw extends JFrame implements ActionListener{
     JButton withdraw, back;
     String pinnumber , username , cardnumber;
     int balance=0;
+    
+    private void mainFrame(){
+        
+    }
+    
     Withdraw(String username,String cardnumber,String pinnumber){
         this.pinnumber = pinnumber;
         this.username = username;
         this.cardnumber = cardnumber;
+        mainFrame();
         
         setLayout(null);
         
@@ -51,10 +57,6 @@ public class Withdraw extends JFrame implements ActionListener{
         back.addActionListener(this);
         add(back);
         
-        
-        
-        
-        
         getContentPane().setBackground(Color.DARK_GRAY);
         setSize(1280 , 780);
         
@@ -68,6 +70,7 @@ public class Withdraw extends JFrame implements ActionListener{
             if(ae.getSource() == withdraw){
                 String withdrawamount = amountText.getText();
                 Date date = new Date();
+                
                 boolean withdrawcheck = withdrawCheck(withdrawamount, 7);
                 
                 if(!withdrawcheck){
