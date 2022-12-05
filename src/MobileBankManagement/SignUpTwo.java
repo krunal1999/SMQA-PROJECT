@@ -16,15 +16,13 @@ public class SignUpTwo extends JFrame implements ActionListener {
         JButton submit , cancel;
         String formno ,username;
         int balance = 0;
-    
-    SignUpTwo(String formno , String username){
-        this.formno = formno;
-        this.username=username;
+        String cardnumber , pinnumber ,  accountType;
+        String checkcardnumber,checkpinnumber;
+
+        
+        private void mainFrame(){
         setTitle("Money Bank");
         setLayout(null);
-        
-        
-        
         //just text line 
         JLabel Page2 = new JLabel("Page 2 : Account Details");
         Page2.setFont(new Font("Arial" , Font.CENTER_BASELINE , 24));
@@ -36,9 +34,9 @@ public class SignUpTwo extends JFrame implements ActionListener {
         type1.setBounds(100,200,200,30);
         add(type1);
         
-        JLabel type2 = new JLabel("XXXXXXX");
+        JLabel type2 = new JLabel(username);
         type2.setFont(new Font("Arial" , Font.CENTER_BASELINE , 16));
-        type2.setBounds(100,200,200,30);
+        type2.setBounds(300,200,200,30);
         add(type2);
         
         
@@ -110,13 +108,21 @@ public class SignUpTwo extends JFrame implements ActionListener {
         setVisible(true);
         setLocation(200, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        
-    }
+        }
     
-    public void actionPerformed(ActionEvent ae){
+        
+        SignUpTwo(String formno , String username){
+        this.formno = formno;
+        this.username=username;
+        mainFrame();
+        }
+    
+        public void actionPerformed(ActionEvent ae){
         if(ae.getSource() == submit){
-            String accountType = "";
+            
+            accountType = "";
             boolean checkbox=false;
+            
             if(r1.isSelected()){
                 accountType = "Saving Account";
             } else if(r2.isSelected()){
@@ -131,56 +137,33 @@ public class SignUpTwo extends JFrame implements ActionListener {
             }else if(!checkbox){
                 JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
             }else{
-              Random random = new Random();
-              
-            String tempcardnumber , temppinnumber;
-            String cardnumber,pinnumber;
+                
+            Random random = new Random();
             
             //sometimes random function give one digit less in card number and pin so we are validating it.
-            tempcardnumber =""+ Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
-            if(tempcardnumber.length() < 16){
-                tempcardnumber = tempcardnumber+2;
-                cardnumber = tempcardnumber;
-            }else{
-                cardnumber = tempcardnumber;
-            }
+            checkcardnumber =""+ Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
+            cardnumber = checkCardNumber(checkcardnumber);
             
-            temppinnumber= "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
-            if(temppinnumber.length() < 4){
-                pinnumber = "9999";
+            checkpinnumber= "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
+            pinnumber = checkPinNumber(checkpinnumber);
+            
+            if(accountType.equals("")){  //false && false , false || false
+                   JOptionPane.showMessageDialog(null, "Details are missing");
+             }else if(c1.isSelected()){
+                if(checkConnection(balance, username, formno, cardnumber, pinnumber, accountType)){
+                    JOptionPane.showMessageDialog(null, "Account created successfully");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Please login again");
+                }
                 
             }else{
-                pinnumber = temppinnumber;
+                JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
             }
-            try{
-                if(accountType.equals("")){  //false && false , false || false
-                   JOptionPane.showMessageDialog(null, "Details are missing");
-                }
-                else{
-                    if(c1.isSelected()){
-                    Conn conn = new Conn();
-                    String query1 = "insert into balance values ('"+balance+"', '"+cardnumber+"', '"+pinnumber+"','"+username+"')";
-                    String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"', '"+username+"')";
-                    conn.s.executeUpdate(query1);
-                    conn.s.executeUpdate(query2);
-                    
-                    JOptionPane.showMessageDialog(null,"User name " + username + "\n Pin: " + pinnumber);
-                        
-                    }else {
-                        JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
-                    } 
-                    setVisible(false);
-                    new Deposit(username,cardnumber, pinnumber).setVisible(true);
-                }
-                        
-            } catch (Exception e){
-                System.out.println(e);
-            }
+            
               
+            
+            
             }
-            
-        
-            
         } else if (ae.getSource() == cancel){
             setVisible(false);
             new Login().setVisible(true);
@@ -188,6 +171,54 @@ public class SignUpTwo extends JFrame implements ActionListener {
         }
         
     }
+        
+    public String checkPinNumber(String pinnumber){
+        if(pinnumber.length() <=3){
+            if(pinnumber.equals("")){
+                pinnumber="2341";
+            }else{
+            int randomInt = Integer.parseInt(pinnumber);
+            randomInt += 1000;
+            pinnumber = randomInt+"";
+            }
+        }
+        return pinnumber;
+    }
+    public String checkCardNumber(String cardnumber){
+        Random random = new Random();
+        if(cardnumber.length() <=15){
+            if(cardnumber.equals("")){
+                cardnumber= ""+ Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
+            }else{
+                cardnumber= ""+ Math.abs((random.nextInt() % 90000000L)+ 1111111000000000L);
+            }
+        }
+        return cardnumber;
+    }
+    
+    public boolean checkConnection(int balance , String username, String formno, String cardnumber , String pinnumber , String accountType){
+        try{
+                    Conn conn = new Conn();
+                    String query1 = "insert into balance values ('"+balance+"', '"+cardnumber+"', '"+pinnumber+"','"+username+"')";
+                    String query2 = "insert into login values ('"+formno+"', '"+accountType+"', '"+cardnumber+"', '"+pinnumber+"', '"+username+"')";
+                    conn.s.executeUpdate(query1);
+                    conn.s.executeUpdate(query2);
+                    
+                    JOptionPane.showMessageDialog(null,"User name " + username + "\n Pin: " + pinnumber);
+                    
+                    setVisible(false);
+                    new Deposit(username,cardnumber, pinnumber).setVisible(true);
+                    return true;
+                        
+            } catch (Exception e){
+                System.out.println(e);
+                return false;
+            }
+        
+        
+        
+    }
+    
     
     public static void main(String args[]){
      new SignUpTwo("","");   
