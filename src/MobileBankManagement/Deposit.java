@@ -15,12 +15,10 @@ public class Deposit extends JFrame implements ActionListener{
     JButton deposit, back;
     String pinnumber , username, cardnumber;
     int balance=0;
-    
-    Deposit(String username,String cardnumber,String pinnumber){
-        this.pinnumber = pinnumber;
-        this.username = username;
-        this.cardnumber = cardnumber;
-        
+    String depositamount;
+    Date date;
+            
+    private void mainFrame(){
         setLayout(null);
         
         JLabel text = new JLabel("Enter the amount to deposit");
@@ -59,14 +57,21 @@ public class Deposit extends JFrame implements ActionListener{
         setLocation(200, 200);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+    }
+    
+    Deposit(String username,String cardnumber,String pinnumber){
+        this.pinnumber = pinnumber;
+        this.username = username;
+        this.cardnumber = cardnumber;
+        mainFrame();
+        
     }
     
     public void actionPerformed(ActionEvent ae){
             if(ae.getSource() == deposit){
                 
-                String depositamount = amountText.getText();
-                Date date = new Date();
+                depositamount = amountText.getText();
+                date = new Date();
                 
                 boolean depocheck = depoCheck(depositamount, 7);
                 
@@ -76,13 +81,42 @@ public class Deposit extends JFrame implements ActionListener{
                     if(!minimumBalance(depositamount) || !checkMultiple(depositamount)){
                         JOptionPane.showMessageDialog(null, "Minimum Deposit is 50 pounds and Please enter amount in multiple of 5");
                     }else{
-                        try{
+                        if(checkConnection(username, balance, depositamount, cardnumber, pinnumber, date)){
+                            JOptionPane.showMessageDialog(null, "Amount has been deposited");
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Amount has not been deposited");
+                        }
+                    }
+                }
+            } else if (ae.getSource() == back){
+                backBtn();
+            }
+        }
+        
+        public  boolean backBtn(){
+            setVisible(false);
+            new Transactions(username,cardnumber, pinnumber).setVisible(true);
+            return true;
+        }
+    
+        public boolean checkConnection(String username, int balance, String depositamount , String cardnumber, String pinnumber , Date date ){
+            try{
                         Conn conn = new Conn();
-                        ResultSet rs = conn.s.executeQuery("select * from balance where username = '" +username+ "'");
+                        ResultSet rs = conn.s.executeQuery("select balance.* , login.* from balance , login where balance.username='"+username+"' and login.username='"+username+"'");
                         if(rs.next()){
+                            
                             if(rs.getString("username").equals(username)){
-                                balance = Integer.parseInt(rs.getString("balance"));
-                                balance += Integer.parseInt(depositamount);
+                                if(rs.getString("accountType").equals("Saving Account")){
+                                    balance = Integer.parseInt(rs.getString("balance"));
+                                    balance += Integer.parseInt(depositamount);
+                                    balance += interest("Saving Account");
+                                
+                            }else{
+                                    balance = Integer.parseInt(rs.getString("balance"));
+                                    balance += Integer.parseInt(depositamount);
+                                    balance += interest("Current Account");                                     
+                                }
+                                
                             }
                         }
 
@@ -92,33 +126,37 @@ public class Deposit extends JFrame implements ActionListener{
                         conn.s.executeUpdate(query);
                         conn.s.executeUpdate(query2);
                         
-                        JOptionPane.showMessageDialog(null, ""+depositamount+ " Cash deposited successfully to account " +username);
+                        JOptionPane.showMessageDialog(null, ""+depositamount+ " Cash deposited successfully to account " +username + " total balance is " +balance);
                         setVisible(false);
                         new Transactions(username,cardnumber, pinnumber).setVisible(true);  
-                        
+                        return true;
                     } catch (Exception er){
                         System.out.println(er);
+                        return false;
                     }
-                    }
-                    
-                    
-                }
-                
-            } else if (ae.getSource() == back){
-                setVisible(false);
-                new Transactions(username,cardnumber, pinnumber).setVisible(true);
-                
+        }
+        public int interest(String acctype){
+            int inter = 0;
+            if(acctype == "Saving Account" ){
+                inter = 30;
+            }else{
+                inter = 10;
             }
+            
+            return inter;
         }
 
         public static boolean depoCheck(String amount,int length) {
              int i;
              String j;
-             if (amount == null || amount.length()>length) {
+             if (amount == null || amount.length()>length || length == 0) {
                 return false;
             }else{
                 try {
                      i = Integer.parseInt(amount);
+                     if(!minimumBalance(amount)){
+                         return false;
+                     }
                 }catch (NumberFormatException nfe) {
                     return false;
                 } 
