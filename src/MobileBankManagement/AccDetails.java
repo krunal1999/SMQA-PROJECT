@@ -10,13 +10,16 @@ import java.awt.event.*;
 
 /**
  *
- * @author krunal
+ * @author  krunal dhavle kbd6
  */
 public class AccDetails extends JFrame implements ActionListener {
     
+	//Global vaiables 
     String username, cardnumber, pinnumber;
     JButton back;
     JLabel card;
+    
+    //frontend start 
     private void mainFrame(){
         
         JLabel text = new JLabel("Account Details");
@@ -46,9 +49,11 @@ public class AccDetails extends JFrame implements ActionListener {
         setLocation(200, 200);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-  
+        
+        //frontend end
     }
-
+    
+    //constructor to build gui, perform task
      AccDetails(String username, String cardnumber , String pinnumber) {
         
         setLayout(null);
@@ -58,6 +63,8 @@ public class AccDetails extends JFrame implements ActionListener {
         this.username=username;
         
         mainFrame();
+        
+        	//checking if user has account in bank or not, if yes then show acc detials , otherwise "user not found"
             if(checkConnection(username)){
                 JOptionPane.showMessageDialog(null, "User detials fetched");
             }
@@ -67,19 +74,23 @@ public class AccDetails extends JFrame implements ActionListener {
           
     }
     
+     //checking which button is clicked by user, here we only have one btn
     public void actionPerformed(ActionEvent ae){
         if (ae.getSource() == back){
+        	//back button is clicked , drop current frame and open new transaction frame
                 setVisible(false);
-                new Transactions(username, cardnumber, pinnumber).setVisible(true);
-                
+                new Transactions(username, cardnumber, pinnumber).setVisible(true); 
             }
     }
     
+    //making connection with databasae and giving result out
     public boolean checkConnection(String Username){
+    	if(username.equals("")) {
+    		return false;
+    	}else {
         try{
             Conn conn = new Conn();
-            ResultSet rs = conn.s.executeQuery("select * from signup where username='"+username+"'");
-            
+            ResultSet rs = conn.s.executeQuery("select * from signup where username='"+username+"'");  
             if(rs.next()){
 
                          card.setText(card.getText()+ "<html> <table style=\"border: 1px solid white;\"> <tr> <th style=\"border: 1px solid white;\">Firstname </th><th style=\"border: 1px solid white;\">Lastname </th><th style=\"border: 1px solid white;\">Age </th><th style=\"border: 1px solid white;\">Gender </th><th style=\"border: 1px solid white;\">Marital </th><th style=\"border: 1px solid white;\">Occupation </th><th style=\"border: 1px solid white;\">pincode </th></tr> "
@@ -94,14 +105,17 @@ public class AccDetails extends JFrame implements ActionListener {
                         );
                         return true;
        
+            }else {
+            	return false;
             }
         }catch (Exception e){
             System.out.println(e);
             return false;
-        }
-        return false;
+        }}
+      
     }
     
+    //main function
     public static void main(String args[]){
         new AccDetails("","","");
     }

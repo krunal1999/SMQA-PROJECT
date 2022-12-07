@@ -8,13 +8,15 @@ import java.util.*;
 import java.sql.*;
 /**
  *
- * @author krunal
+ * @author krunal dhavle kbd6
  */
 public class PinChange extends JFrame implements ActionListener{
+	//global declaration 
     String pinnumber , username, cardnumber;
     JPasswordField currpintext, newpintext , repintext;
     JButton update , back;
     
+    //frontend start
     private void mainFrame(){
         setLayout(null); 
        
@@ -86,8 +88,12 @@ public class PinChange extends JFrame implements ActionListener{
         setLocation(200, 200);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        //frontend end
     }
     
+    
+    //contructor to build gui
     PinChange(String username,String cardnumber , String pinnumber){
        
        this.pinnumber = pinnumber;
@@ -98,12 +104,14 @@ public class PinChange extends JFrame implements ActionListener{
     }
     
     
-    
+    //funtion to check which btn is clicked by user
     public void actionPerformed(ActionEvent ae){
+    	//if update is click, then check currentpin , new pin and reenter pin matches 
         if(ae.getSource() == update){
             String checkpin = currpintext.getText();
             String nextpin = newpintext.getText();
             String repin = repintext.getText();
+            //to check if entered pin is valid number or not
             boolean pincheck = pinCheck(checkpin, checkpin.length());
             boolean nextcheck = pinCheck(nextpin, nextpin.length());
             boolean recheck = pinCheck(repin, repin.length());
@@ -114,9 +122,11 @@ public class PinChange extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin in new pin");
             }else if(!recheck){
                 JOptionPane.showMessageDialog(null, "Please Enter 4 digit pin reenter pin");
-            }else{
+            }//if entered pin is valid then create connection with datbase to check current pin linked with username
+            else{
             if(checkpin.equals(pinnumber)){
                 if(nextpin.equals(repin)){
+                	//if all condition are statisfied then change pin of user 
                     if(checkConnection(nextpin, checkpin)){
                         
                         setVisible(false);
@@ -133,13 +143,15 @@ public class PinChange extends JFrame implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Current pin does not match");
             }
         }
-        } else{
+        }// if back btn is clicked 
+        else{
             setVisible(false);
             new Transactions(username,cardnumber,pinnumber).setVisible(true);
             
         }
         
     }
+    //function to check validation of entered input
     public static boolean pinCheck(String pinnumber,int length) {
              int i;
              
@@ -148,16 +160,19 @@ public class PinChange extends JFrame implements ActionListener{
             }else{
                 try {
                      i = Integer.parseInt(pinnumber);
+                     if(i>-1 && length == 4) {
+                    	 return true;
+                     }
+                     else {
+                    	 return false;
+                     }
                 }catch (NumberFormatException nfe) {
                     return false;
                 } 
-                if(length == 4){
-                    return true;
-                }
-                return true; 
              }
          }
     
+    //function to make connection with database and change pin
     public boolean checkConnection(String nextpin , String checkpin){
         if(nextpin.equals("") || checkpin.equals("")){
             return false;
@@ -174,11 +189,13 @@ public class PinChange extends JFrame implements ActionListener{
                         return true;
                     } catch (Exception er){
                         System.out.println(er);
-                        return false;
+                        
                     }
+        return false;
         }
     }
     
+    //main function
     public static void main(String args[]){
         new PinChange("","","");
     }

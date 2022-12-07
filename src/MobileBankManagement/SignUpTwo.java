@@ -8,9 +8,11 @@ import java.util.*;
 
 /**
  *
- * @author krunal
+ * @author krunal dhavle kbd6
  */
+
 public class SignUpTwo extends JFrame implements ActionListener {
+		//decalaring global variable
         JRadioButton r1,r2;
         JCheckBox c1;
         JButton submit , cancel;
@@ -19,7 +21,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
         String cardnumber , pinnumber ,  accountType;
         String checkcardnumber,checkpinnumber;
 
-        
+        //frontend start
         private void mainFrame(){
         setTitle("Money Bank");
         setLayout(null);
@@ -108,28 +110,35 @@ public class SignUpTwo extends JFrame implements ActionListener {
         setVisible(true);
         setLocation(200, 200);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        //frontend ends
         }
     
-        
+        //constructor
         SignUpTwo(String formno , String username){
         this.formno = formno;
         this.username=username;
         mainFrame();
         }
-    
+        
+        //function to check which btn is clicked
         public void actionPerformed(ActionEvent ae){
-        if(ae.getSource() == submit){
+        	
+        	//i submit is clicked , then check and create cardnumber and pin
+        	if(ae.getSource() == submit){
             
             accountType = "";
             boolean checkbox=false;
             
             if(r1.isSelected()){
                 accountType = "Saving Account";
-            } else if(r2.isSelected()){
+            } else{
                 accountType = "Current Account";
             }
             if(c1.isSelected()){
                 checkbox = true;
+            }else {
+            	checkbox = false;
             }
             
             if(accountType.equals("")){
@@ -147,9 +156,10 @@ public class SignUpTwo extends JFrame implements ActionListener {
             checkpinnumber= "" + Math.abs((random.nextInt() % 9000L)+ 1000L);
             pinnumber = checkPinNumber(checkpinnumber);
             
-            if(accountType.equals("")){  //false && false , false || false
+            if(accountType.equals("")){ 
                    JOptionPane.showMessageDialog(null, "Details are missing");
-             }else if(c1.isSelected()){
+             }//if all data is filled and checkbox is ticked then make connection with database and create new user
+            else if(c1.isSelected()){
                 if(checkConnection(balance, username, formno, cardnumber, pinnumber, accountType)){
                     JOptionPane.showMessageDialog(null, "Account created successfully");
                 }else{
@@ -159,19 +169,15 @@ public class SignUpTwo extends JFrame implements ActionListener {
             }else{
                 JOptionPane.showMessageDialog(null, "Accept the terms and conditions");
             }
-            
-              
-            
-            
             }
-        } else if (ae.getSource() == cancel){
+        } else {
             setVisible(false);
             new Login().setVisible(true);
             
         }
         
     }
-        
+    //function to check random pin number is valid or not
     public String checkPinNumber(String pinnumber){
         if(pinnumber.length() <=3){
             if(pinnumber.equals("")){
@@ -184,6 +190,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
         }
         return pinnumber;
     }
+    //fuction to check if random card number valid or not
     public String checkCardNumber(String cardnumber){
         Random random = new Random();
         if(cardnumber.length() <=15){
@@ -196,6 +203,7 @@ public class SignUpTwo extends JFrame implements ActionListener {
         return cardnumber;
     }
     
+    //function to make connection with database and insert value into it
     public boolean checkConnection(int balance , String username, String formno, String cardnumber , String pinnumber , String accountType){
         try{
                     Conn conn = new Conn();
@@ -215,11 +223,9 @@ public class SignUpTwo extends JFrame implements ActionListener {
                 return false;
             }
         
-        
-        
     }
     
-    
+    //main
     public static void main(String args[]){
      new SignUpTwo("","");   
     }

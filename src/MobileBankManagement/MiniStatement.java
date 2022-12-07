@@ -5,20 +5,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import java.awt.event.*;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
+
 
 
 
 /**
  *
- * @author krunal
+ * @author krunal dhavle kbd6
  */
 public class MiniStatement extends JFrame implements ActionListener {
     
+	//global decalaration
     String username, cardnumber, pinnumber;
     JButton back , update;
     JLabel card;
     
+    //frontend start
     private void mainFrame(){
         setLayout(null);
         JLabel text = new JLabel("Mini Statement");
@@ -36,7 +38,7 @@ public class MiniStatement extends JFrame implements ActionListener {
         card= new JLabel();
         card.setFont(new Font("Arial" , Font.CENTER_BASELINE , 20));
         card.setForeground(Color.green);
-        card.setBounds(60,200,1200,300);
+        card.setBounds(60,200,1200,400);
         add(card);
         
         update = new JButton("Update");
@@ -63,8 +65,12 @@ public class MiniStatement extends JFrame implements ActionListener {
         setLocation(200, 200);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        
+        //frontend ends
     }
-
+    
+    
+    //constructor to call frontend
     MiniStatement(String username, String cardnumber , String pinnumber) {
         this.cardnumber=cardnumber;
         this.pinnumber=pinnumber;
@@ -72,25 +78,31 @@ public class MiniStatement extends JFrame implements ActionListener {
         mainFrame();
     }
     
+    //function to check which btn is pressed by user
     public void actionPerformed(ActionEvent ae){
-        if (ae.getSource() == back){
-                backBtn();
-                
-            }else if(ae.getSource() == update){
+         //if update is pressed , and need to press to view statement
+         if(ae.getSource() == update){
+        	 //check if username has account or not
                 if(checkConnection(username)){
                     JOptionPane.showMessageDialog(null, "user details found");
                 }else{
                       JOptionPane.showMessageDialog(null, "user not found");
                 }
+        }//if back btn is pressed ,call backbtn function
+         else {
+        	backBtn();
         }
+         
     }
     
+    //function to open previous frame
     public boolean backBtn(){
         setVisible(false);
         new Transactions(username, cardnumber, pinnumber).setVisible(true);
         return true;
     }
     
+    //function to check connection with database , if successful then return true and ministatement of last 8 transcations
     public boolean checkConnection(String username){
             card.setText("");
             if(username.equals("")){
@@ -98,9 +110,9 @@ public class MiniStatement extends JFrame implements ActionListener {
             }else{
             try{
             Conn conn = new Conn();
-            ResultSet rs = conn.s.executeQuery("select * from bank  where username='"+username+"' order by date desc limit 5");
+            ResultSet rs = conn.s.executeQuery("select * from bank where username='"+username+"' order by date desc limit 8");
             if(rs.next()){
-            while(rs.next()){
+            do{
                     card.setText(card.getText()+ "<html> <table> "
                         + "<tr> <td style=\"border: 1px solid white;\">"
                         +rs.getString("cardnumber")+"</td>"+"<td style=\"border: 1px solid white;\">"
@@ -110,8 +122,9 @@ public class MiniStatement extends JFrame implements ActionListener {
                         +rs.getString("interestamt")+"</td> <td width=\"150\"style=\"border: 1px solid white;\">"     
                         + rs.getString("balance") 
                         +"</td></tr></table>"
-                        );
-            }
+                        );       
+            }while(rs.next());
+            
             return true;
             }
             else{
@@ -121,6 +134,7 @@ public class MiniStatement extends JFrame implements ActionListener {
             System.out.println(e);
             return false;
         }
+           
         }
     }
     

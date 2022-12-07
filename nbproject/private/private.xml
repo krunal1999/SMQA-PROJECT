@@ -3,17 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/Deposit.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/Conn.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/AccDetails.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/Withdraw.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/PinChange.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/SignUpTwo.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/MiniStatement.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/BalanceEnquiry.java</file>
+            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/test/MobileBankManagement/LoginTest.java</file>
             <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/Login.java</file>
             <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/SignUpOne.java</file>
-            <file>file:/D:/SMQA%20PROJECT/Mobile%20Bank%20Management/src/MobileBankManagement/Transactions.java</file>
         </group>
     </open-files>
 </project-private>

@@ -5,18 +5,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import java.awt.event.*;
-import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 /**
  *
- * @author krunal
+ * @author krunal dhavle kbd6
  */
 public class BalanceEnquiry extends JFrame implements ActionListener {
     
+	//global variable declaration
     String username, cardnumber, pinnumber;
     JButton back;
     JLabel card;
     
+    //frontend start
     private void mainFrame(){
         JLabel text = new JLabel("Balance Enquiry");
         text.setFont(new Font("Arial" , Font.CENTER_BASELINE , 44));
@@ -46,9 +47,10 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        
+        //frontend ends
     }
     
+    //constructor to build gui , perform task
     public BalanceEnquiry(String username, String cardnumber , String pinnumber) {
         
         setLayout(null);
@@ -58,6 +60,8 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
         this.username=username;
         
         mainFrame();
+        
+        //check if user has account, if yes then fetch balance from account , otherwise "user not found"
         if(checkConnection(username)){
             JOptionPane.showMessageDialog(null, "Balance fetch for username "+username);
         }else{
@@ -65,6 +69,7 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
         }   
     }
     
+    //here also we have only back button, when pressed go to previous window
     public void actionPerformed(ActionEvent ae){
         if (ae.getSource() == back){
                 setVisible(false);
@@ -72,7 +77,11 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
             }
     }
     
+    //connection with database , and fetching values from account
     public boolean checkConnection(String username){
+    	if(username.equals("")) {
+    		return false;
+    	}else {
         try{
             Conn conn = new Conn();
             ResultSet rs = conn.s.executeQuery("select balance.* , login.* from balance , login where balance.username='"+username+"' and login.username='"+username+"'");
@@ -87,12 +96,10 @@ public class BalanceEnquiry extends JFrame implements ActionListener {
         } catch (Exception e){
             System.out.println(e);
             return false;
-        }
+        }}
         
         return false;
     }
-    
-    
     
     
     public static void main(String args[]){
