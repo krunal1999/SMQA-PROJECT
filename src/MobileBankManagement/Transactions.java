@@ -5,14 +5,15 @@ import javax.swing.*;
 import java.awt.event.*;
 /**
  *
- * @author krunal
+ * @author krunal dhavle kbd6
  */
 public class Transactions extends JFrame implements ActionListener{
+	
          //global declaration
          JButton deposit, withdraw,Balance , accdet,pinch,ministatement,exit;
          String username , pinnumber, cardnumber;
     
-    
+         //constructor to build gui
         Transactions(String username , String cardnumber, String pinnumber){
         this.username = username;
         this.pinnumber = pinnumber;
@@ -101,42 +102,46 @@ public class Transactions extends JFrame implements ActionListener{
         //frontend ends
         }
         
+        //function to check which btn is clicked by user
         public void actionPerformed(ActionEvent ae){
+        	//is exit is clicked logout from account
             if(ae.getSource() == exit){
                 setVisible(false);
                 new Login().setVisible(true);
                 
-            } else if (ae.getSource() == deposit){
+            } // if deposit btn is clicked open deposit frame
+            else if (ae.getSource() == deposit){
                 setVisible(false);
                 new Deposit(username,cardnumber, pinnumber).setVisible(true);
                 
-            }else if (ae.getSource() == withdraw){
+            }// if withdraw btn is clicked open deposit frame
+            else if (ae.getSource() == withdraw){
                 setVisible(false);
                 new Withdraw(username, cardnumber, pinnumber).setVisible(true);
                 
-            }else if (ae.getSource() == pinch){
+            }// if pin change btn is clicked open deposit frame
+            else if (ae.getSource() == pinch){
                 setVisible(false);
                 new PinChange(username,cardnumber,pinnumber).setVisible(true);
                 
-            }
+            }// if account detials btn is clicked open deposit frame
             else if (ae.getSource() == accdet){
                 setVisible(false);
                 new AccDetails(username,cardnumber,pinnumber).setVisible(true);
                 
-            }else if (ae.getSource() == ministatement){
+            }// if ministatement btn is clicked open deposit frame
+            else if (ae.getSource() == ministatement){
                 setVisible(false);
                 new MiniStatement(username,cardnumber,pinnumber).setVisible(true);
                 
-            }else if (ae.getSource() == Balance){
+            }// if balance btn is clicked open deposit frame
+            else if (ae.getSource() == Balance){
                 setVisible(false);
                 new BalanceEnquiry(username,cardnumber,pinnumber).setVisible(true);
                 
             }
             
         }
-
-        
-    
     
     public static void main(String args[]){
         new Transactions("" , "","");

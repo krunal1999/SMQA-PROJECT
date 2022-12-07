@@ -1,1 +1,4 @@
 /dist/
+/test/
+hs_err_pid24228.log
+/build/
