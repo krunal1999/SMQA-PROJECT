@@ -1,73 +1,82 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- You may freely edit this file. See commented blocks below for -->
-<!-- some examples of how to customize the build. -->
-<!-- (If you delete it and reopen the project it will be recreated.) -->
-<!-- By default, only the Clean and Build commands use this build script. -->
-<!-- Commands such as Run, Debug, and Test only use this build script if -->
-<!-- the Compile on Save feature is turned off for the project. -->
-<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
-<!-- in the project's Project Properties dialog box.-->
-<project name="Mobile_Bank_Management" default="default" basedir=".">
-    <description>Builds, tests, and runs the project Mobile Bank Management.</description>
-    <import file="nbproject/build-impl.xml"/>
-    <!--
+<project name="JunitTestFramework" basedir="." default="jar" xmlns:jacoco="antlib:org.jacoco.ant">
+	<property name="src.dir" value="src" />
+	<property name="classes.dir" value="classes" />
+	<property name="project.name" value="JunitTestFramework" />
+	<!-- Code coverage report generation -->
+	<property name="result.dir" value="./target" />
+	<property name="result.report.dir" value="${result.dir}/site/jacoco" />
+	<property name="result.exec.file" value="${result.dir}/jacoco.exec" />
+	
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="./lib/jacocoant.jar" />
+	</taskdef>
 
-    There exist several targets which are by default empty and which can be 
-    used for execution of your tasks. These targets are usually executed 
-    before and after some main targets. They are: 
+	<!-- Defining the compilation classpath -->
+	<path id="classpath">
+		<pathelement location="${classes.dir}" />
+		<fileset dir="./lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
 
-      -pre-init:                 called before initialization of project properties
-      -post-init:                called after initialization of project properties
-      -pre-compile:              called before javac compilation
-      -post-compile:             called after javac compilation
-      -pre-compile-single:       called before javac compilation of single file
-      -post-compile-single:      called after javac compilation of single file
-      -pre-compile-test:         called before javac compilation of JUnit tests
-      -post-compile-test:        called after javac compilation of JUnit tests
-      -pre-compile-test-single:  called before javac compilation of single JUnit test
-      -post-compile-test-single: called after javac compilation of single JUunit test
-      -pre-jar:                  called before JAR building
-      -post-jar:                 called after JAR building
-      -post-clean:               called after cleaning build products
+	<!-- Delete old coverage report -->
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+		<delete dir="${result.dir}" />
+	</target>
 
-    (Targets beginning with '-' are not intended to be called on their own.)
+	<!-- Create target folder -->
+	<target name="create">
+		<mkdir dir="${result.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
 
-    Example of inserting an obfuscator after compilation could look like this:
+	<!-- Compile the project -->
+	<target name="compile" depends="clean, create">
+		<javac srcdir="${src.dir}" destdir="${classes.dir}" debug="on" deprecation="off" encoding="cp1252" includeantruntime="false">
+			<include name="**/*.java" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
 
-        <target name="-post-compile">
-            <obfuscate>
-                <fileset dir="${build.classes.dir}"/>
-            </obfuscate>
-        </target>
+	<!-- Prepare execution data file -->
+		
+	<target name="test" depends="compile">
+		<jacoco:coverage destfile="${result.exec.file}" xmlns:jacoco="antlib:org.jacoco.ant" exclclassloader="sun.reflect.DelegatingClassLoader:javassist.Loader">
+			<junit fork="true" forkmode="once" printsummary="on">
+				<classpath refid="classpath" />
+				<formatter type="xml" />
+				<batchtest todir="${result.dir}" fork="yes">
+					<fileset dir="${classes.dir}">
+						<include name="com/main/test/*Test*" />
+					</fileset>
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+	</target>
 
-    For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
+	<!-- Generate code coverage reports -->
+	<target name="report" depends="test">
+		<jacoco:report>
+			<executiondata>
+				<file file="${result.exec.file}" />
+			</executiondata>
+			<structure name="JUnit Code Coverage Report">
+				<classfiles>
+					<fileset dir="${classes.dir}" />
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${src.dir}" />
+				</sourcefiles>
+			</structure>
+			<html destdir="${result.report.dir}" />
+		</jacoco:report>
+	</target>
 
-
-    Another way to customize the build is by overriding existing main targets.
-    The targets of interest are: 
-
-      -init-macrodef-javac:     defines macro for javac compilation
-      -init-macrodef-junit:     defines macro for junit execution
-      -init-macrodef-debug:     defines macro for class debugging
-      -init-macrodef-java:      defines macro for class execution
-      -do-jar:                  JAR building
-      run:                      execution of project 
-      -javadoc-build:           Javadoc generation
-      test-report:              JUnit report generation
-
-    An example of overriding the target for project execution could look like this:
-
-        <target name="run" depends="Mobile_Bank_Management-impl.jar">
-            <exec dir="bin" executable="launcher.exe">
-                <arg file="${dist.jar}"/>
-            </exec>
-        </target>
-
-    Notice that the overridden target depends on the jar target and not only on 
-    the compile target as the regular run target does. Again, for a list of available 
-    properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
-
-    -->
+	<!-- Create jar file -->
+	<target name="jar" depends="report">
+		<jar jarfile="${result.dir}/build/${project.name}.jar" basedir="${result.dir}">
+			
+		</jar>
+	</target>
 </project>
